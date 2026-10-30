@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f1ea">
+  <title>A Little Good-Night Note</title>
+  <style>
+    :root {
+      --site-primary: #29284f;
+      --site-on-primary: #ffffff;
+      --site-secondary: #d97983;
+      --site-on-secondary: #24172c;
+      --site-background: #f6f1ea;
+      --site-on-background: #28233a;
+      --site-font-body: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      --site-font-heading: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --site-heading-scale: 1;
+      --site-spacing-scale: 1;
+      --site-radius-scale: 1;
+      --site-decoration-opacity: 1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--site-font-body);
+      background: light-dark(#f6f1ea, #111326);
+      color: light-dark(var(--site-on-background), #f7f0ea);
+    }
+
+    .app-root {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 0;
+      background-color: light-dark(var(--site-background), #111326);
+      color: light-dark(var(--site-on-background), #f7f0ea);
+    }
+
+    .night-sky {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: var(--site-decoration-opacity);
+      background:
+        radial-gradient(circle at 82% 18%, light-dark(#f7dfcf, #36345e) 0, transparent 25%),
+        radial-gradient(circle at 12% 88%, light-dark(#e7d9e9, #272746) 0, transparent 30%);
+    }
+
+    .star {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--site-secondary);
+      opacity: .62;
+      animation: twinkle 3.8s ease-in-out infinite alternate;
+    }
+
+    .star:nth-child(1) { top: 13%; left: 13%; }
+    .star:nth-child(2) { top: 24%; left: 78%; width: 4px; height: 4px; animation-delay: .9s; }
+    .star:nth-child(3) { top: 72%; left: 10%; width: 3px; height: 3px; animation-delay: 1.4s; }
+    .star:nth-child(4) { top: 83%; left: 84%; width: 4px; height: 4px; animation-delay: .5s; }
+    .star:nth-child(5) { top: 47%; left: 91%; width: 3px; height: 3px; animation-delay: 1.9s; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(290px, .92fr);
+      align-items: center;
+      gap: calc(52px * var(--site-spacing-scale));
+      width: min(1100px, 100%);
+      margin: auto;
+      padding: clamp(28px, 6vw, 76px);
+    }
+
+    .copy {
+      max-width: 610px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 24px;
+      color: var(--site-secondary);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 25px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1 {
+      margin: 0;
+      color: light-dark(var(--site-primary), #f6e8e2);
+      font-family: var(--site-font-heading);
+      font-size: clamp(3.5rem, 8vw, 6.8rem);
+      font-weight: 500;
+      letter-spacing: -.055em;
+      line-height: .96;
+      text-wrap: balance;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--site-secondary);
+      font-style: italic;
+    }
+
+    .intro {
+      max-width: 470px;
+      margin: 27px 0 0;
+      color: light-dark(#62596a, #d0c8dd);
+      font-size: clamp(1rem, 1.6vw, 1.12rem);
+      line-height: 1.85;
+    }
+
+    .personal-message {
+      margin: 19px 0 0;
+      color: var(--site-secondary);
+      font-family: var(--site-font-heading);
+      font-size: clamp(1.2rem, 2vw, 1.45rem);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .button-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .open-note {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 23px;
+      border: 0;
+      border-radius: calc(999px * var(--site-radius-scale));
+      background: var(--site-primary);
+      color: var(--site-on-primary);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 26px #29284f24;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .open-note:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px #29284f30;
+    }
+
+    .open-note:focus-visible {
+      outline: 3px solid var(--site-secondary);
+      outline-offset: 4px;
+    }
+
+    .hint {
+      color: light-dark(#83798b, #b8aec6);
+      font-size: 12px;
+    }
+
+    .note {
+      max-width: 510px;
+      margin-top: 26px;
+      padding: 24px 25px;
+      border: 1px solid light-dark(#e8dce2, #45415e);
+      border-radius: calc(18px * var(--site-radius-scale));
+      background: light-dark(#fffaf6, #1d1d38);
+      box-shadow: 0 14px 38px #29284f12;
+      animation: rise-in .45s ease both;
+    }
+
+    .note[hidden] {
+      display: none;
+    }
+
+    .note-label {
+      margin: 0 0 10px;
+      color: var(--site-secondary);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .note p:last-child {
+      margin: 0;
+      color: light-dark(#51475e, #e5ddea);
+      font-family: var(--site-font-heading);
+      font-size: 1.13rem;
+      line-height: 1.75;
+    }
+
+    .signature {
+      margin: 22px 0 0;
+      color: light-dark(#887e8d, #b9afc5);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .visual {
+      position: relative;
+      display: grid;
+      min-height: 440px;
+      place-items: center;
+    }
+
+    .moon-card {
+      position: relative;
+      display: grid;
+      width: min(100%, 390px);
+      aspect-ratio: 1 / 1.08;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid light-dark(#e6d8dc, #45415e);
+      border-radius: 220px 220px calc(24px * var(--site-radius-scale)) calc(24px * var(--site-radius-scale));
+      background: linear-gradient(155deg, light-dark(#e9dce9, #262544), light-dark(#f9dfd1, #393052));
+      box-shadow: 0 26px 70px #29284f1c;
+    }
+
+    .moon-card::before,
+    .moon-card::after {
+      content: "";
+      position: absolute;
+      border: 1px solid #ffffff66;
+      border-radius: 50%;
+      opacity: .65;
+    }
+
+    .moon-card::before {
+      width: 82%;
+      aspect-ratio: 1;
+    }
+
+    .moon-card::after {
+      width: 65%;
+      aspect-ratio: 1;
+    }
+
+    .moon {
+      position: relative;
+      z-index: 1;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: #fff7dc;
+      box-shadow: 0 0 38px #fff2c9a8, 0 0 100px #fff2c955;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .moon::after {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 39px;
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      background: light-dark(#e9dce9, #262544);
+    }
+
+    .moon-stars {
+      position: absolute;
+      z-index: 2;
+      color: #fff8e7;
+      font-size: 21px;
+      letter-spacing: 25px;
+      text-shadow: 0 0 16px #fff7cf;
+    }
+
+    .moon-stars.one { top: 24%; left: 18%; }
+    .moon-stars.two { right: 12%; bottom: 27%; font-size: 15px; letter-spacing: 15px; }
+
+    .visual-caption {
+      position: absolute;
+      right: 0;
+      bottom: 9px;
+      left: 0;
+      margin: 0;
+      color: light-dark(#766b7e, #c6b9d1);
+      font-family: var(--site-font-heading);
+      font-size: 1.1rem;
+      font-style: italic;
+      text-align: center;
+    }
+
+    @keyframes twinkle {
+      from { transform: scale(.75); opacity: .3; }
+      to { transform: scale(1.3); opacity: .9; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 760px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 42px 25px 35px;
+      }
+
+      .visual {
+        min-height: 330px;
+        order: -1;
+      }
+
+      .moon-card {
+        width: min(76vw, 300px);
+      }
+
+      .moon {
+        width: 100px;
+        height: 100px;
+      }
+
+      .moon::after {
+        left: 30px;
+        width: 95px;
+        height: 95px;
+      }
+
+      .visual-caption {
+        bottom: -2px;
+      }
+
+      h1 {
+        font-size: clamp(3.4rem, 17vw, 5.2rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-root">
+    <div class="night-sky" aria-hidden="true">
+      <span class="star"></span>
+      <span class="star"></span>
+      <span class="star"></span>
+      <span class="star"></span>
+      <span class="star"></span>
+    </div>
+
+    <div class="layout">
+      <section class="copy" aria-labelledby="page-title">
+        <p class="eyebrow">A little page made with care</p>
+        <h1 id="page-title">Good night,<span>sunshine.</span></h1>
+        <p class="intro">
+          Just a small reminder before the day ends: you deserve a peaceful night,
+          sweet dreams, and a tomorrow that gives you plenty of reasons to smile.
+        </p>
+        <p class="personal-message">To the future queen, Mrs. Ansah — love you so much. ♡</p>
+
+        <div class="button-row">
+          <button class="open-note" id="note-button" type="button" aria-expanded="false" aria-controls="goodnight-note">
+            Open your good-night note <span aria-hidden="true">&nbsp;→</span>
+          </button>
+          <span class="hint">A tiny surprise, just for you.</span>
+        </div>
+
+        <article class="note" id="goodnight-note" hidden>
+          <p class="note-label">Before you sleep</p>
+          <p>
+            I hope you can put the worries of today down for a while and rest easy.
+            Thank you for being part of my days. Sleep peacefully, wake up refreshed,
+            and remember that someone is wishing you the very best. Good night. 🌙
+          </p>
+        </article>
+
+        <p class="signature">Made with a little code, and a lot of care. ♡</p>
+      </section>
+
+      <aside class="visual" aria-label="A softly glowing crescent moon under the stars">
+        <div class="moon-card" aria-hidden="true">
+          <span class="moon-stars one">✦ ·</span>
+          <span class="moon"></span>
+          <span class="moon-stars two">· ✧</span>
+        </div>
+        <p class="visual-caption">May the night be gentle with you.</p>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const noteButton = document.getElementById("note-button");
+    const note = document.getElementById("goodnight-note");
+
+    noteButton.addEventListener("click", () => {
+      const isOpening = note.hidden;
+      note.hidden = !isOpening;
+      noteButton.setAttribute("aria-expanded", String(isOpening));
+      noteButton.innerHTML = isOpening
+        ? 'Close your note <span aria-hidden="true">&nbsp;×</span>'
+        : 'Open your good-night note <span aria-hidden="true">&nbsp;→</span>';
+    });
+  </script>
+</body>
+</html>
