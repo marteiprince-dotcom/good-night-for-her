@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080714">
+<meta name="description" content="A little universe filled with our memories, moments and story.">
 <title>Our Little Universe ❤️</title>
 
 <style>
@@ -32,7 +33,6 @@ body {
 }
 
 button, input { font: inherit; }
-
 button { cursor: pointer; }
 
 #stars {
@@ -266,8 +266,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px;
   padding: 16px clamp(18px,5vw,65px);
-  background: rgba(8,7,20,.82);
+  background: rgba(8,7,20,.88);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid #ffffff12;
 }
@@ -276,6 +277,7 @@ nav {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.35rem;
   color: #d5baff;
+  white-space: nowrap;
 }
 
 .nav-links {
@@ -299,6 +301,7 @@ nav {
   padding: 9px 13px;
   border-radius: 30px;
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .hero {
@@ -414,52 +417,91 @@ nav {
   font-size: 13px;
 }
 
+/* MEMORY GALLERY */
+
+.memory-intro {
+  text-align: center;
+  max-width: 550px;
+  margin: -25px auto 40px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 13px;
+}
+
 .memory-grid {
   display: grid;
   grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
 .memory-card {
-  min-height: 260px;
-  border: 1px solid #ffffff18;
-  border-radius: 18px;
+  border: 1px solid #ffffff20;
+  border-radius: 19px;
   overflow: hidden;
-  background: var(--glass);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  background: linear-gradient(140deg,#171329,#100d20);
   position: relative;
+  transition: transform .4s ease, border-color .4s ease, box-shadow .4s ease;
 }
 
-.photo-placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(circle at 30% 25%,#70549a77,transparent 50%),
-    linear-gradient(140deg,#211b3c,#121025);
-  color: #d3b8ff;
-  font-size: 35px;
+.memory-card:hover {
+  transform: translateY(-6px);
+  border-color: #c3a2ff77;
+  box-shadow: 0 18px 45px #0006;
 }
 
-.memory-card div:last-child {
-  z-index: 1;
-  padding: 20px;
-  background: linear-gradient(transparent,#090714);
+.memory-media {
+  display: block;
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  background: #100d20;
 }
 
-.memory-card h3 {
-  font-size: 1.7rem;
-  margin: 0 0 5px;
+.memory-media.video {
+  object-fit: contain;
 }
 
-.memory-card p {
+video.memory-media {
+  outline: none;
+}
+
+.memory-caption {
+  padding: 19px 21px 22px;
+  background: linear-gradient(140deg,#171329,#100d20);
+}
+
+.memory-caption small {
+  display: block;
+  color: var(--pink);
+  font-size: 9px;
+  letter-spacing: .2em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.memory-caption h3 {
+  font-size: 1.8rem;
+  margin: 0 0 6px;
+  color: #f8f3ff;
+}
+
+.memory-caption p {
   color: #d0c5dd;
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 1.7;
   margin: 0;
 }
+
+.gallery-note {
+  text-align: center;
+  color: #a89cbd;
+  font-family: 'Cormorant Garamond',serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-top: 35px;
+}
+
+/* LETTER */
 
 .letter-wrap {
   max-width: 650px;
@@ -526,18 +568,25 @@ footer {
   transform: translateY(0);
 }
 
-@keyframes rotate { to { transform: rotate(360deg); } }
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
 
 @keyframes appear {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@media(max-width:650px) {
+@media(max-width:750px) {
+  nav { flex-wrap: wrap; }
   .nav-links { display: none; }
+}
+
+@media(max-width:650px) {
   .memory-grid { grid-template-columns: 1fr; }
-  .memory-card { min-height: 230px; }
+  .memory-media { height: 290px; }
   .section { padding: 75px 22px; }
+  .memory-card:hover { transform: none; }
 }
 
 @media(prefers-reduced-motion:reduce) {
@@ -557,6 +606,7 @@ footer {
 <div class="nebula two"></div>
 
 <!-- SECRET ENTRANCE -->
+
 <main id="entrance">
   <div class="entrance-content">
 
@@ -578,7 +628,11 @@ footer {
 
     <div class="login-card">
       <h2>A little question...</h2>
-      <p>Before you enter our universe, tell me something only we should know.</p>
+
+      <p>
+        Before you enter our universe, tell me something
+        only we should know.
+      </p>
 
       <label for="dateInput" class="overline">
         What's the official date of our proposal?
@@ -597,23 +651,31 @@ footer {
         UNLOCK OUR UNIVERSE ✦
       </button>
 
-      <div id="error" role="status"></div>
+      <div id="error" role="status" aria-live="polite"></div>
     </div>
 
-    <p class="tiny">MADE OF MEMORIES · HELD TOGETHER BY LOVE</p>
+    <p class="tiny">
+      MADE OF MEMORIES · HELD TOGETHER BY LOVE
+    </p>
+
   </div>
 </main>
 
 <!-- CINEMATIC TRANSITION -->
+
 <div id="reveal">
   <div class="reveal-inner">
     <p class="overline">ACCESS GRANTED ✦</p>
     <h2>You remembered. ❤️</h2>
-    <p>Some dates are impossible to forget.<br>Welcome to our little universe.</p>
+    <p>
+      Some dates are impossible to forget.<br>
+      Welcome to our little universe.
+    </p>
   </div>
 </div>
 
 <!-- MAIN WEBSITE -->
+
 <div id="website">
 
   <nav>
@@ -626,12 +688,16 @@ footer {
       <a href="#letter">MY LETTER</a>
     </div>
 
-    <button class="music-btn" id="musicBtn">♫ MUSIC OFF</button>
+    <button class="music-btn" id="musicBtn">
+      ♫ MUSIC OFF
+    </button>
   </nav>
 
   <!-- HOME -->
+
   <section class="hero" id="home">
     <div class="fade">
+
       <p class="overline">20 · 11 · 2025</p>
 
       <h1>
@@ -645,20 +711,28 @@ footer {
         feel like everything.
       </p>
 
-      <p class="date-label">ONE YEAR OF US · ONE BEAUTIFUL BEGINNING</p>
+      <p class="date-label">
+        ONE YEAR OF US · ONE BEAUTIFUL BEGINNING
+      </p>
 
       <a class="scroll-link" href="#beginning">
         EXPLORE OUR STORY ↓
       </a>
+
     </div>
   </section>
 
   <!-- STORY -->
+
   <section class="section" id="beginning">
+
     <div class="section-heading fade">
       <p class="overline">CHAPTER ONE</p>
       <h2>Where it all began.</h2>
-      <p>Every beautiful story has a beginning. This one is ours.</p>
+      <p>
+        Every beautiful story has a beginning.
+        This one is ours.
+      </p>
     </div>
 
     <div class="timeline">
@@ -693,60 +767,141 @@ footer {
     </div>
   </section>
 
-  <!-- MEMORIES -->
+  <!-- MEMORIES GALLERY -->
+
   <section class="section" id="memories">
 
     <div class="section-heading fade">
       <p class="overline">OUR LITTLE COLLECTION</p>
       <h2>Moments in our universe.</h2>
-      <p>Little memories that deserve a permanent place.</p>
+      <p>
+        Little memories that deserve a permanent place.
+      </p>
     </div>
+
+    <p class="memory-intro fade">
+      Some memories are captured in pictures.
+      Others are better remembered in motion.
+      Every one of them belongs here.
+    </p>
 
     <div class="memory-grid">
 
-      <article class="memory-card fade">
-        <div class="photo-placeholder">✦</div>
-        <div>
-          <h3>Our beginning</h3>
-          <p>Every story starts somewhere.</p>
-        </div>
-      </article>
+      <!-- PHOTO ONE -->
 
       <article class="memory-card fade">
-        <div class="photo-placeholder">♡</div>
-        <div>
-          <h3>Little moments</h3>
-          <p>The things we'll never forget.</p>
+
+        <img
+          class="memory-media"
+          src="assets/images/0eebc0e7-5559-4463-9b8a-983bbbe6e146.jpg"
+          alt="A special mirror picture memory"
+          loading="lazy"
+        >
+
+        <div class="memory-caption">
+          <small>PHOTO MEMORY 01</small>
+          <h3>Our little moment.</h3>
+          <p>
+            A picture, a moment and a memory worth keeping.
+          </p>
         </div>
+
       </article>
 
-      <article class="memory-card fade">
-        <div class="photo-placeholder">☾</div>
-        <div>
-          <h3>Favourite memories</h3>
-          <p>Moments worth keeping forever.</p>
-        </div>
-      </article>
+      <!-- PHOTO TWO -->
 
       <article class="memory-card fade">
-        <div class="photo-placeholder">∞</div>
-        <div>
-          <h3>To many more</h3>
-          <p>The story is still being written.</p>
+
+        <img
+          class="memory-media"
+          src="assets/images/71f0fa78-72f8-4548-9e04-7c6ecdf4a2c2.jpg"
+          alt="A treasured moment together"
+          loading="lazy"
+        >
+
+        <div class="memory-caption">
+          <small>PHOTO MEMORY 02</small>
+          <h3>Closer than words.</h3>
+          <p>
+            Some moments say everything without saying a word.
+          </p>
         </div>
+
+      </article>
+
+      <!-- VIDEO ONE -->
+
+      <article class="memory-card fade">
+
+        <video
+          class="memory-media video"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.53%20AM.mp4"
+            type="video/mp4"
+          >
+          Your browser does not support this video.
+        </video>
+
+        <div class="memory-caption">
+          <small>VIDEO MEMORY 01</small>
+          <h3>A moment in motion.</h3>
+          <p>
+            Press play and relive this little memory.
+          </p>
+        </div>
+
+      </article>
+
+      <!-- VIDEO TWO -->
+
+      <article class="memory-card fade">
+
+        <video
+          class="memory-media video"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.56%20AM%20%282%29.mp4"
+            type="video/mp4"
+          >
+          Your browser does not support this video.
+        </video>
+
+        <div class="memory-caption">
+          <small>VIDEO MEMORY 02</small>
+          <h3>Another favourite moment.</h3>
+          <p>
+            Another little piece of our story, saved forever.
+          </p>
+        </div>
+
       </article>
 
     </div>
+
+    <p class="gallery-note fade">
+      Four memories. One little universe. Infinite meaning. ✦
+    </p>
+
   </section>
 
   <!-- LETTER -->
+
   <section class="section" id="letter">
+
     <div class="section-heading fade">
       <p class="overline">A MESSAGE FROM MY HEART</p>
       <h2>Dear you...</h2>
     </div>
 
     <article class="letter-wrap fade">
+
       <h3>To my favourite person,</h3>
 
       <p>
@@ -776,12 +931,18 @@ footer {
       <p class="signature-end">
         With love, always. ❤️
       </p>
+
     </article>
+
   </section>
 
   <!-- ENDING -->
+
   <section class="final-section fade">
-    <p class="overline">ONE YEAR · COUNTLESS MEMORIES</p>
+
+    <p class="overline">
+      ONE YEAR · COUNTLESS MEMORIES
+    </p>
 
     <h2>
       To us,<br>
@@ -800,6 +961,7 @@ footer {
     <p style="font-size:12px;margin-top:50px">
       OUR LITTLE UNIVERSE · EST. 20.11.2025
     </p>
+
   </section>
 
   <footer>
@@ -808,27 +970,38 @@ footer {
 
 </div>
 
-<audio id="ambientAudio" loop preload="none"
-  src="assets/music/ambient.mp3"></audio>
+<!-- BACKGROUND MUSIC -->
+
+<audio
+  id="ambientAudio"
+  loop
+  preload="none"
+  src="assets/music/ambient.mp3">
+</audio>
 
 <script>
+
 // COSMIC STARFIELD
+
 const canvas = document.getElementById('stars');
 const ctx = canvas.getContext('2d');
 
 let stars = [];
 
 function resizeStars() {
-  canvas.width = window.innerWidth * devicePixelRatio;
-  canvas.height = window.innerHeight * devicePixelRatio;
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+  canvas.width = window.innerWidth * ratio;
+  canvas.height = window.innerHeight * ratio;
+
+  ctx.setTransform(ratio,0,0,ratio,0,0);
 
   stars = Array.from({length:120}, () => ({
-    x: Math.random()*window.innerWidth,
-    y: Math.random()*window.innerHeight,
-    size: Math.random()*1.7+.3,
-    alpha: Math.random()*.8+.2,
-    speed: Math.random()*.008+.002
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: Math.random() * 1.7 + .3,
+    alpha: Math.random() * .8 + .2,
+    speed: Math.random() * .008 + .002
   }));
 }
 
@@ -837,10 +1010,14 @@ function drawStars() {
 
   stars.forEach(star => {
     star.alpha += star.speed;
-    if(star.alpha > 1 || star.alpha < .15) star.speed *= -1;
+
+    if(star.alpha > 1 || star.alpha < .15) {
+      star.speed *= -1;
+    }
 
     ctx.beginPath();
     ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
+
     ctx.fillStyle = `rgba(218,198,255,${star.alpha})`;
     ctx.fill();
   });
@@ -850,40 +1027,55 @@ function drawStars() {
 
 resizeStars();
 drawStars();
+
 window.addEventListener('resize',resizeStars);
 
+
 // DATE ACCESS
+
 const input = document.getElementById('dateInput');
 const button = document.getElementById('unlockBtn');
 const error = document.getElementById('error');
 
 function unlock() {
+
   const answer = input.value.trim();
 
   if(answer !== '20/11/2025') {
-    error.textContent = 'Not quite... think of our special day again. ♡';
+    error.textContent =
+      'Not quite... think of our special day again. ♡';
+
     input.value = '';
     input.focus();
     return;
   }
 
   error.textContent = '';
+
   document.getElementById('entrance').style.opacity = '0';
   document.getElementById('entrance').style.transform = 'scale(1.04)';
 
   setTimeout(() => {
+
     document.getElementById('entrance').style.display = 'none';
 
     const reveal = document.getElementById('reveal');
     reveal.classList.add('show');
 
     setTimeout(() => {
+
       reveal.classList.remove('show');
+
       document.getElementById('website').classList.add('show');
+
       window.scrollTo(0,0);
+
       observeSections();
+
     },3200);
+
   },900);
+
 }
 
 button.addEventListener('click',unlock);
@@ -892,39 +1084,92 @@ input.addEventListener('keydown',event => {
   if(event.key === 'Enter') unlock();
 });
 
+
 // SCROLL ANIMATIONS
+
 function observeSections() {
+
+  const items = document.querySelectorAll('.fade');
+
+  if(!('IntersectionObserver' in window)) {
+    items.forEach(item => item.classList.add('visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver(entries => {
+
     entries.forEach(entry => {
+
       if(entry.isIntersecting) {
         entry.target.classList.add('visible');
         observer.unobserve(entry.target);
       }
+
     });
+
   },{threshold:.12});
 
-  document.querySelectorAll('.fade').forEach(item => {
+  items.forEach(item => {
     observer.observe(item);
   });
+
 }
 
+
 // AMBIENT MUSIC
+
 const music = document.getElementById('ambientAudio');
 const musicBtn = document.getElementById('musicBtn');
 
 musicBtn.addEventListener('click',async () => {
+
   if(music.paused) {
+
     try {
+
       await music.play();
       musicBtn.textContent = '♫ MUSIC ON';
-    } catch {
-      musicBtn.textContent = '♫ ADD MUSIC FILE';
+
+    } catch(error) {
+
+      musicBtn.textContent = '♫ MUSIC FILE NOT FOUND';
+
     }
+
   } else {
+
     music.pause();
     musicBtn.textContent = '♫ MUSIC OFF';
+
   }
+
 });
+
+music.addEventListener('ended',() => {
+  musicBtn.textContent = '♫ MUSIC OFF';
+});
+
+
+// PAUSE OTHER VIDEOS WHEN ONE STARTS
+
+const memoryVideos = document.querySelectorAll('.memory-card video');
+
+memoryVideos.forEach(video => {
+
+  video.addEventListener('play',() => {
+
+    memoryVideos.forEach(otherVideo => {
+
+      if(otherVideo !== video) {
+        otherVideo.pause();
+      }
+
+    });
+
+  });
+
+});
+
 </script>
 
 </body>
