@@ -1,438 +1,931 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f6f1ea">
-  <title>A Little Good-Night Note</title>
-  <style>
-    :root {
-      --site-primary: #29284f;
-      --site-on-primary: #ffffff;
-      --site-secondary: #d97983;
-      --site-on-secondary: #24172c;
-      --site-background: #f6f1ea;
-      --site-on-background: #28233a;
-      --site-font-body: "Avenir Next", Avenir, "Segoe UI", sans-serif;
-      --site-font-heading: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-      --site-heading-scale: 1;
-      --site-spacing-scale: 1;
-      --site-radius-scale: 1;
-      --site-decoration-opacity: 1;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080714">
+<title>Our Little Universe ❤️</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&display=swap');
 
-    html {
-      min-height: 100%;
-    }
+:root {
+  --bg: #080714;
+  --purple: #a88bff;
+  --pink: #e9a9d4;
+  --white: #f8f3ff;
+  --muted: #aaa1c4;
+  --glass: rgba(255,255,255,.055);
+}
 
-    body {
-      min-height: 100vh;
-      margin: 0;
-      font-family: var(--site-font-body);
-      background: light-dark(#f6f1ea, #111326);
-      color: light-dark(var(--site-on-background), #f7f0ea);
-    }
+* { box-sizing: border-box; }
 
-    .app-root {
-      position: relative;
-      isolation: isolate;
-      display: flex;
-      min-height: 100vh;
-      width: 100%;
-      overflow: hidden;
-      border-radius: 0;
-      background-color: light-dark(var(--site-background), #111326);
-      color: light-dark(var(--site-on-background), #f7f0ea);
-    }
+html { scroll-behavior: smooth; }
 
-    .night-sky {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-      opacity: var(--site-decoration-opacity);
-      background:
-        radial-gradient(circle at 82% 18%, light-dark(#f7dfcf, #36345e) 0, transparent 25%),
-        radial-gradient(circle at 12% 88%, light-dark(#e7d9e9, #272746) 0, transparent 30%);
-    }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
 
-    .star {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--site-secondary);
-      opacity: .62;
-      animation: twinkle 3.8s ease-in-out infinite alternate;
-    }
+button, input { font: inherit; }
 
-    .star:nth-child(1) { top: 13%; left: 13%; }
-    .star:nth-child(2) { top: 24%; left: 78%; width: 4px; height: 4px; animation-delay: .9s; }
-    .star:nth-child(3) { top: 72%; left: 10%; width: 3px; height: 3px; animation-delay: 1.4s; }
-    .star:nth-child(4) { top: 83%; left: 84%; width: 4px; height: 4px; animation-delay: .5s; }
-    .star:nth-child(5) { top: 47%; left: 91%; width: 3px; height: 3px; animation-delay: 1.9s; }
+button { cursor: pointer; }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(290px, .92fr);
-      align-items: center;
-      gap: calc(52px * var(--site-spacing-scale));
-      width: min(1100px, 100%);
-      margin: auto;
-      padding: clamp(28px, 6vw, 76px);
-    }
+#stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
 
-    .copy {
-      max-width: 610px;
-    }
+.nebula {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: .15;
+  pointer-events: none;
+  z-index: 0;
+}
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 24px;
-      color: var(--site-secondary);
-      font-size: 12px;
-      font-weight: 750;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
+.nebula.one {
+  background: #783edb;
+  top: -230px;
+  left: -180px;
+}
 
-    .eyebrow::before {
-      content: "";
-      width: 25px;
-      height: 1px;
-      background: currentColor;
-    }
+.nebula.two {
+  background: #c14e9a;
+  right: -250px;
+  top: 40%;
+}
 
-    h1 {
-      margin: 0;
-      color: light-dark(var(--site-primary), #f6e8e2);
-      font-family: var(--site-font-heading);
-      font-size: clamp(3.5rem, 8vw, 6.8rem);
-      font-weight: 500;
-      letter-spacing: -.055em;
-      line-height: .96;
-      text-wrap: balance;
-    }
+#entrance {
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  text-align: center;
+  transition: opacity 1s, transform 1s;
+}
 
-    h1 span {
-      display: block;
-      color: var(--site-secondary);
-      font-style: italic;
-    }
+.entrance-content {
+  width: 100%;
+  max-width: 520px;
+  animation: appear 1.5s ease both;
+}
 
-    .intro {
-      max-width: 470px;
-      margin: 27px 0 0;
-      color: light-dark(#62596a, #d0c8dd);
-      font-size: clamp(1rem, 1.6vw, 1.12rem);
-      line-height: 1.85;
-    }
+.orbit {
+  width: 160px;
+  height: 160px;
+  border: 1px solid rgba(196,164,255,.35);
+  border-radius: 50%;
+  margin: 0 auto 35px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: rotate 22s linear infinite;
+}
 
-    .personal-message {
-      margin: 19px 0 0;
-      color: var(--site-secondary);
-      font-family: var(--site-font-heading);
-      font-size: clamp(1.2rem, 2vw, 1.45rem);
-      font-style: italic;
-      line-height: 1.5;
-    }
+.orbit::before, .orbit::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(196,164,255,.22);
+  border-radius: 50%;
+}
 
-    .button-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 32px;
-    }
+.orbit::before { inset: 17px; }
+.orbit::after { inset: 35px; }
 
-    .open-note {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 52px;
-      padding: 0 23px;
-      border: 0;
-      border-radius: calc(999px * var(--site-radius-scale));
-      background: var(--site-primary);
-      color: var(--site-on-primary);
-      font: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 26px #29284f24;
-      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    }
+.planet {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #f4d6ff, #9c69d9 45%, #362052);
+  box-shadow: 0 0 35px #b68bff88;
+}
 
-    .open-note:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px #29284f30;
-    }
+.orbit-dot {
+  position: absolute;
+  top: 17px;
+  left: 24px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f6c6ed;
+  box-shadow: 0 0 15px #f6c6ed;
+}
 
-    .open-note:focus-visible {
-      outline: 3px solid var(--site-secondary);
-      outline-offset: 4px;
-    }
+.overline {
+  color: var(--pink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+}
 
-    .hint {
-      color: light-dark(#83798b, #b8aec6);
-      font-size: 12px;
-    }
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+}
 
-    .note {
-      max-width: 510px;
-      margin-top: 26px;
-      padding: 24px 25px;
-      border: 1px solid light-dark(#e8dce2, #45415e);
-      border-radius: calc(18px * var(--site-radius-scale));
-      background: light-dark(#fffaf6, #1d1d38);
-      box-shadow: 0 14px 38px #29284f12;
-      animation: rise-in .45s ease both;
-    }
+.main-title {
+  font-size: clamp(3.4rem, 11vw, 6rem);
+  line-height: .95;
+  margin: 22px 0;
+  letter-spacing: -.04em;
+}
 
-    .note[hidden] {
-      display: none;
-    }
+.main-title span {
+  display: block;
+  color: #c5a7ff;
+  font-style: italic;
+}
 
-    .note-label {
-      margin: 0 0 10px;
-      color: var(--site-secondary);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-    }
+.subtitle {
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  margin: 20px auto 35px;
+}
 
-    .note p:last-child {
-      margin: 0;
-      color: light-dark(#51475e, #e5ddea);
-      font-family: var(--site-font-heading);
-      font-size: 1.13rem;
-      line-height: 1.75;
-    }
+.login-card {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(193,166,255,.2);
+  border-radius: 22px;
+  padding: 27px 23px;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 70px #0005;
+}
 
-    .signature {
-      margin: 22px 0 0;
-      color: light-dark(#887e8d, #b9afc5);
-      font-size: 12px;
-      letter-spacing: .04em;
-    }
+.login-card h2 {
+  font-size: 1.7rem;
+  margin: 0 0 12px;
+}
 
-    .visual {
-      position: relative;
-      display: grid;
-      min-height: 440px;
-      place-items: center;
-    }
+.login-card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
 
-    .moon-card {
-      position: relative;
-      display: grid;
-      width: min(100%, 390px);
-      aspect-ratio: 1 / 1.08;
-      place-items: center;
-      overflow: hidden;
-      border: 1px solid light-dark(#e6d8dc, #45415e);
-      border-radius: 220px 220px calc(24px * var(--site-radius-scale)) calc(24px * var(--site-radius-scale));
-      background: linear-gradient(155deg, light-dark(#e9dce9, #262544), light-dark(#f9dfd1, #393052));
-      box-shadow: 0 26px 70px #29284f1c;
-    }
+#dateInput {
+  width: 100%;
+  margin: 17px 0 12px;
+  padding: 17px;
+  text-align: center;
+  letter-spacing: .13em;
+  color: white;
+  background: rgba(255,255,255,.06);
+  border: 1px solid #8170a5;
+  border-radius: 12px;
+  outline: none;
+}
 
-    .moon-card::before,
-    .moon-card::after {
-      content: "";
-      position: absolute;
-      border: 1px solid #ffffff66;
-      border-radius: 50%;
-      opacity: .65;
-    }
+#dateInput:focus {
+  border-color: #c6a7ff;
+  box-shadow: 0 0 20px #a88bff22;
+}
 
-    .moon-card::before {
-      width: 82%;
-      aspect-ratio: 1;
-    }
+.primary-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  background: linear-gradient(110deg,#a987ee,#df9dca);
+  color: #170d25;
+  font-weight: 700;
+  transition: .3s;
+}
 
-    .moon-card::after {
-      width: 65%;
-      aspect-ratio: 1;
-    }
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px #a987ee44;
+}
 
-    .moon {
-      position: relative;
-      z-index: 1;
-      width: 132px;
-      height: 132px;
-      border-radius: 50%;
-      background: #fff7dc;
-      box-shadow: 0 0 38px #fff2c9a8, 0 0 100px #fff2c955;
-      animation: float 5s ease-in-out infinite;
-    }
+#error {
+  min-height: 20px;
+  color: #ff9fc7;
+  font-size: 12px;
+}
 
-    .moon::after {
-      content: "";
-      position: absolute;
-      top: -15px;
-      left: 39px;
-      width: 125px;
-      height: 125px;
-      border-radius: 50%;
-      background: light-dark(#e9dce9, #262544);
-    }
+.tiny {
+  color: #817895;
+  font-size: 10px;
+  letter-spacing: .15em;
+  margin-top: 25px;
+}
 
-    .moon-stars {
-      position: absolute;
-      z-index: 2;
-      color: #fff8e7;
-      font-size: 21px;
-      letter-spacing: 25px;
-      text-shadow: 0 0 16px #fff7cf;
-    }
+#reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  place-items: center;
+  background: #080714;
+  text-align: center;
+  padding: 25px;
+}
 
-    .moon-stars.one { top: 24%; left: 18%; }
-    .moon-stars.two { right: 12%; bottom: 27%; font-size: 15px; letter-spacing: 15px; }
+#reveal.show { display: grid; }
 
-    .visual-caption {
-      position: absolute;
-      right: 0;
-      bottom: 9px;
-      left: 0;
-      margin: 0;
-      color: light-dark(#766b7e, #c6b9d1);
-      font-family: var(--site-font-heading);
-      font-size: 1.1rem;
-      font-style: italic;
-      text-align: center;
-    }
+.reveal-inner { animation: appear 2s ease both; }
 
-    @keyframes twinkle {
-      from { transform: scale(.75); opacity: .3; }
-      to { transform: scale(1.3); opacity: .9; }
-    }
+.reveal-inner h2 {
+  font-size: clamp(3rem,10vw,5rem);
+  margin: 20px 0;
+}
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+.reveal-inner p {
+  color: var(--muted);
+  line-height: 1.8;
+}
 
-    @keyframes rise-in {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+#website {
+  display: none;
+  position: relative;
+  z-index: 1;
+}
 
-    @media (max-width: 760px) {
-      .layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 42px 25px 35px;
-      }
+#website.show { display: block; }
 
-      .visual {
-        min-height: 330px;
-        order: -1;
-      }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px clamp(18px,5vw,65px);
+  background: rgba(8,7,20,.82);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid #ffffff12;
+}
 
-      .moon-card {
-        width: min(76vw, 300px);
-      }
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  color: #d5baff;
+}
 
-      .moon {
-        width: 100px;
-        height: 100px;
-      }
+.nav-links {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
 
-      .moon::after {
-        left: 30px;
-        width: 95px;
-        height: 95px;
-      }
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 11px;
+}
 
-      .visual-caption {
-        bottom: -2px;
-      }
+.nav-links a:hover { color: white; }
 
-      h1 {
-        font-size: clamp(3.4rem, 17vw, 5.2rem);
-      }
-    }
+.music-btn {
+  border: 1px solid #ffffff30;
+  color: white;
+  background: #ffffff0c;
+  padding: 9px 13px;
+  border-radius: 30px;
+  font-size: 11px;
+}
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-      }
-    }
-  </style>
+.hero {
+  min-height: 90vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 70px 22px;
+}
+
+.hero h1 {
+  font-size: clamp(4rem,12vw,8rem);
+  line-height: .9;
+  margin: 25px 0;
+}
+
+.hero h1 span {
+  display: block;
+  color: #c3a2ff;
+  font-style: italic;
+}
+
+.hero-description {
+  color: var(--muted);
+  max-width: 460px;
+  line-height: 1.9;
+  margin: 25px auto;
+}
+
+.date-label {
+  color: var(--pink);
+  font-size: 11px;
+  letter-spacing: .25em;
+}
+
+.scroll-link {
+  display: inline-block;
+  margin-top: 35px;
+  color: #d4baff;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.section {
+  max-width: 1050px;
+  margin: auto;
+  padding: 100px 25px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 55px;
+}
+
+.section-heading h2 {
+  font-size: clamp(2.8rem,7vw,4.5rem);
+  margin: 14px 0;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.timeline {
+  position: relative;
+  max-width: 700px;
+  margin: auto;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(transparent,#a88bff,#e9a9d4,transparent);
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 45px 40px;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #c2a0ff;
+  box-shadow: 0 0 15px #a88bff;
+}
+
+.timeline-item small {
+  color: var(--pink);
+  letter-spacing: .12em;
+  font-size: 10px;
+}
+
+.timeline-item h3 {
+  font-size: 2rem;
+  margin: 9px 0;
+}
+
+.timeline-item p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 20px;
+}
+
+.memory-card {
+  min-height: 260px;
+  border: 1px solid #ffffff18;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--glass);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 25%,#70549a77,transparent 50%),
+    linear-gradient(140deg,#211b3c,#121025);
+  color: #d3b8ff;
+  font-size: 35px;
+}
+
+.memory-card div:last-child {
+  z-index: 1;
+  padding: 20px;
+  background: linear-gradient(transparent,#090714);
+}
+
+.memory-card h3 {
+  font-size: 1.7rem;
+  margin: 0 0 5px;
+}
+
+.memory-card p {
+  color: #d0c5dd;
+  font-size: 11px;
+  margin: 0;
+}
+
+.letter-wrap {
+  max-width: 650px;
+  margin: auto;
+  border: 1px solid #c2a0ff35;
+  background: linear-gradient(140deg,#171329,#100d20);
+  border-radius: 20px;
+  padding: clamp(25px,6vw,55px);
+  box-shadow: 0 25px 80px #0005;
+}
+
+.letter-wrap h3 {
+  color: #e5b4dd;
+  font-size: 2rem;
+}
+
+.letter-wrap p {
+  color: #d2c8df;
+  line-height: 2;
+  font-family: 'Cormorant Garamond',serif;
+  font-size: 1.2rem;
+}
+
+.signature-end {
+  text-align: right;
+  color: #d6a8ed !important;
+  font-style: italic;
+}
+
+.final-section {
+  text-align: center;
+  padding: 130px 25px;
+}
+
+.final-section h2 {
+  font-size: clamp(3.5rem,10vw,6rem);
+  margin: 20px 0;
+}
+
+.final-section h2 span { color: #c4a3ff; }
+
+.final-section p {
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #837b9a;
+  font-size: 10px;
+  letter-spacing: .12em;
+  border-top: 1px solid #ffffff10;
+}
+
+.fade {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity .9s ease,transform .9s ease;
+}
+
+.fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:650px) {
+  .nav-links { display: none; }
+  .memory-grid { grid-template-columns: 1fr; }
+  .memory-card { min-height: 230px; }
+  .section { padding: 75px 22px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
 </head>
+
 <body>
-  <main class="app-root">
-    <div class="night-sky" aria-hidden="true">
-      <span class="star"></span>
-      <span class="star"></span>
-      <span class="star"></span>
-      <span class="star"></span>
-      <span class="star"></span>
+
+<canvas id="stars"></canvas>
+<div class="nebula one"></div>
+<div class="nebula two"></div>
+
+<!-- SECRET ENTRANCE -->
+<main id="entrance">
+  <div class="entrance-content">
+
+    <div class="orbit">
+      <div class="planet"></div>
+      <div class="orbit-dot"></div>
     </div>
 
-    <div class="layout">
-      <section class="copy" aria-labelledby="page-title">
-        <p class="eyebrow">A little page made with care</p>
-        <h1 id="page-title">Good night,<span>sunshine.</span></h1>
-        <p class="intro">
-          Just a small reminder before the day ends: you deserve a peaceful night,
-          sweet dreams, and a tomorrow that gives you plenty of reasons to smile.
+    <p class="overline">A universe built for two</p>
+
+    <h1 class="main-title">
+      Our Little
+      <span>Universe.</span>
+    </h1>
+
+    <p class="subtitle">
+      Somewhere between fate and forever, there was us.
+    </p>
+
+    <div class="login-card">
+      <h2>A little question...</h2>
+      <p>Before you enter our universe, tell me something only we should know.</p>
+
+      <label for="dateInput" class="overline">
+        What's the official date of our proposal?
+      </label>
+
+      <input
+        id="dateInput"
+        type="text"
+        inputmode="numeric"
+        maxlength="10"
+        placeholder="DD/MM/YYYY"
+        autocomplete="off"
+      >
+
+      <button class="primary-btn" id="unlockBtn">
+        UNLOCK OUR UNIVERSE ✦
+      </button>
+
+      <div id="error" role="status"></div>
+    </div>
+
+    <p class="tiny">MADE OF MEMORIES · HELD TOGETHER BY LOVE</p>
+  </div>
+</main>
+
+<!-- CINEMATIC TRANSITION -->
+<div id="reveal">
+  <div class="reveal-inner">
+    <p class="overline">ACCESS GRANTED ✦</p>
+    <h2>You remembered. ❤️</h2>
+    <p>Some dates are impossible to forget.<br>Welcome to our little universe.</p>
+  </div>
+</div>
+
+<!-- MAIN WEBSITE -->
+<div id="website">
+
+  <nav>
+    <div class="logo">Our Little Universe ✦</div>
+
+    <div class="nav-links">
+      <a href="#home">HOME</a>
+      <a href="#beginning">OUR STORY</a>
+      <a href="#memories">MEMORIES</a>
+      <a href="#letter">MY LETTER</a>
+    </div>
+
+    <button class="music-btn" id="musicBtn">♫ MUSIC OFF</button>
+  </nav>
+
+  <!-- HOME -->
+  <section class="hero" id="home">
+    <div class="fade">
+      <p class="overline">20 · 11 · 2025</p>
+
+      <h1>
+        Every universe<br>
+        <span>has a story.</span>
+      </h1>
+
+      <p class="hero-description">
+        And somehow, in this endless universe,
+        I found someone who made my little world
+        feel like everything.
+      </p>
+
+      <p class="date-label">ONE YEAR OF US · ONE BEAUTIFUL BEGINNING</p>
+
+      <a class="scroll-link" href="#beginning">
+        EXPLORE OUR STORY ↓
+      </a>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="section" id="beginning">
+    <div class="section-heading fade">
+      <p class="overline">CHAPTER ONE</p>
+      <h2>Where it all began.</h2>
+      <p>Every beautiful story has a beginning. This one is ours.</p>
+    </div>
+
+    <div class="timeline">
+
+      <article class="timeline-item fade">
+        <small>20 NOVEMBER 2025</small>
+        <h3>The beginning of us.</h3>
+        <p>
+          The day our story officially became something special.
+          A date that will always have a place in my heart.
         </p>
-        <p class="personal-message">To the future queen, Mrs. Ansah — love you so much. ♡</p>
+      </article>
 
-        <div class="button-row">
-          <button class="open-note" id="note-button" type="button" aria-expanded="false" aria-controls="goodnight-note">
-            Open your good-night note <span aria-hidden="true">&nbsp;→</span>
-          </button>
-          <span class="hint">A tiny surprise, just for you.</span>
-        </div>
+      <article class="timeline-item fade">
+        <small>CHAPTER TWO</small>
+        <h3>Our little moments.</h3>
+        <p>
+          The conversations, the laughter, the unexpected moments
+          and everything that made our journey ours.
+        </p>
+      </article>
 
-        <article class="note" id="goodnight-note" hidden>
-          <p class="note-label">Before you sleep</p>
-          <p>
-            I hope you can put the worries of today down for a while and rest easy.
-            Thank you for being part of my days. Sleep peacefully, wake up refreshed,
-            and remember that someone is wishing you the very best. Good night. 🌙
-          </p>
-        </article>
+      <article class="timeline-item fade">
+        <small>CHAPTER THREE</small>
+        <h3>One year later.</h3>
+        <p>
+          Here we are, with a whole collection of memories
+          and so many more chapters waiting to be written.
+        </p>
+      </article>
 
-        <p class="signature">Made with a little code, and a lot of care. ♡</p>
-      </section>
-
-      <aside class="visual" aria-label="A softly glowing crescent moon under the stars">
-        <div class="moon-card" aria-hidden="true">
-          <span class="moon-stars one">✦ ·</span>
-          <span class="moon"></span>
-          <span class="moon-stars two">· ✧</span>
-        </div>
-        <p class="visual-caption">May the night be gentle with you.</p>
-      </aside>
     </div>
-  </main>
+  </section>
 
-  <script>
-    const noteButton = document.getElementById("note-button");
-    const note = document.getElementById("goodnight-note");
+  <!-- MEMORIES -->
+  <section class="section" id="memories">
 
-    noteButton.addEventListener("click", () => {
-      const isOpening = note.hidden;
-      note.hidden = !isOpening;
-      noteButton.setAttribute("aria-expanded", String(isOpening));
-      noteButton.innerHTML = isOpening
-        ? 'Close your note <span aria-hidden="true">&nbsp;×</span>'
-        : 'Open your good-night note <span aria-hidden="true">&nbsp;→</span>';
+    <div class="section-heading fade">
+      <p class="overline">OUR LITTLE COLLECTION</p>
+      <h2>Moments in our universe.</h2>
+      <p>Little memories that deserve a permanent place.</p>
+    </div>
+
+    <div class="memory-grid">
+
+      <article class="memory-card fade">
+        <div class="photo-placeholder">✦</div>
+        <div>
+          <h3>Our beginning</h3>
+          <p>Every story starts somewhere.</p>
+        </div>
+      </article>
+
+      <article class="memory-card fade">
+        <div class="photo-placeholder">♡</div>
+        <div>
+          <h3>Little moments</h3>
+          <p>The things we'll never forget.</p>
+        </div>
+      </article>
+
+      <article class="memory-card fade">
+        <div class="photo-placeholder">☾</div>
+        <div>
+          <h3>Favourite memories</h3>
+          <p>Moments worth keeping forever.</p>
+        </div>
+      </article>
+
+      <article class="memory-card fade">
+        <div class="photo-placeholder">∞</div>
+        <div>
+          <h3>To many more</h3>
+          <p>The story is still being written.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- LETTER -->
+  <section class="section" id="letter">
+    <div class="section-heading fade">
+      <p class="overline">A MESSAGE FROM MY HEART</p>
+      <h2>Dear you...</h2>
+    </div>
+
+    <article class="letter-wrap fade">
+      <h3>To my favourite person,</h3>
+
+      <p>
+        If someone had told me that one day I would create an entire
+        little universe just to celebrate someone, I probably would
+        have laughed.
+      </p>
+
+      <p>
+        But here I am, turning memories into pages, moments into
+        stars, and feelings into something you can visit whenever
+        you want.
+      </p>
+
+      <p>
+        Thank you for being part of this chapter of my life.
+        Thank you for the memories, the laughter and all the little
+        things that make this journey special.
+      </p>
+
+      <p>
+        This website is just a small reminder that our story matters
+        to me, and that I look forward to all the beautiful chapters
+        still ahead of us.
+      </p>
+
+      <p class="signature-end">
+        With love, always. ❤️
+      </p>
+    </article>
+  </section>
+
+  <!-- ENDING -->
+  <section class="final-section fade">
+    <p class="overline">ONE YEAR · COUNTLESS MEMORIES</p>
+
+    <h2>
+      To us,<br>
+      <span>and beyond.</span>
+    </h2>
+
+    <p>
+      In a universe full of stars,<br>
+      I'm grateful our paths crossed.
+    </p>
+
+    <p style="color:#d4a9e9;margin-top:35px">
+      Happy 1st Anniversary, my love. ❤️
+    </p>
+
+    <p style="font-size:12px;margin-top:50px">
+      OUR LITTLE UNIVERSE · EST. 20.11.2025
+    </p>
+  </section>
+
+  <footer>
+    DESIGNED WITH CODE · CREATED WITH LOVE · FOREVER OURS ✦
+  </footer>
+
+</div>
+
+<audio id="ambientAudio" loop preload="none"
+  src="assets/music/ambient.mp3"></audio>
+
+<script>
+// COSMIC STARFIELD
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+
+let stars = [];
+
+function resizeStars() {
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+
+  stars = Array.from({length:120}, () => ({
+    x: Math.random()*window.innerWidth,
+    y: Math.random()*window.innerHeight,
+    size: Math.random()*1.7+.3,
+    alpha: Math.random()*.8+.2,
+    speed: Math.random()*.008+.002
+  }));
+}
+
+function drawStars() {
+  ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+  stars.forEach(star => {
+    star.alpha += star.speed;
+    if(star.alpha > 1 || star.alpha < .15) star.speed *= -1;
+
+    ctx.beginPath();
+    ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
+    ctx.fillStyle = `rgba(218,198,255,${star.alpha})`;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(drawStars);
+}
+
+resizeStars();
+drawStars();
+window.addEventListener('resize',resizeStars);
+
+// DATE ACCESS
+const input = document.getElementById('dateInput');
+const button = document.getElementById('unlockBtn');
+const error = document.getElementById('error');
+
+function unlock() {
+  const answer = input.value.trim();
+
+  if(answer !== '20/11/2025') {
+    error.textContent = 'Not quite... think of our special day again. ♡';
+    input.value = '';
+    input.focus();
+    return;
+  }
+
+  error.textContent = '';
+  document.getElementById('entrance').style.opacity = '0';
+  document.getElementById('entrance').style.transform = 'scale(1.04)';
+
+  setTimeout(() => {
+    document.getElementById('entrance').style.display = 'none';
+
+    const reveal = document.getElementById('reveal');
+    reveal.classList.add('show');
+
+    setTimeout(() => {
+      reveal.classList.remove('show');
+      document.getElementById('website').classList.add('show');
+      window.scrollTo(0,0);
+      observeSections();
+    },3200);
+  },900);
+}
+
+button.addEventListener('click',unlock);
+
+input.addEventListener('keydown',event => {
+  if(event.key === 'Enter') unlock();
+});
+
+// SCROLL ANIMATIONS
+function observeSections() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-  </script>
+  },{threshold:.12});
+
+  document.querySelectorAll('.fade').forEach(item => {
+    observer.observe(item);
+  });
+}
+
+// AMBIENT MUSIC
+const music = document.getElementById('ambientAudio');
+const musicBtn = document.getElementById('musicBtn');
+
+musicBtn.addEventListener('click',async () => {
+  if(music.paused) {
+    try {
+      await music.play();
+      musicBtn.textContent = '♫ MUSIC ON';
+    } catch {
+      musicBtn.textContent = '♫ ADD MUSIC FILE';
+    }
+  } else {
+    music.pause();
+    musicBtn.textContent = '♫ MUSIC OFF';
+  }
+});
+</script>
+
 </body>
 </html>
