@@ -1314,7 +1314,6 @@ async function startBackgroundMusic() {
 // MANUAL MUSIC CONTROL
 musicControl.addEventListener('click', async () => {
   if (backgroundMusic.paused) {
-    // Do not start background music over a memory video.
     if (hasPlayingVideo()) {
       showMusicToast('Enjoy your memory video first ♡');
       return;
@@ -1333,7 +1332,6 @@ musicControl.addEventListener('click', async () => {
       showMusicToast('The song could not play. Please try again.');
     }
   } else {
-    // A manual pause cancels automatic resuming.
     resumeAfterVideo = false;
     resumeAfterVisibility = false;
 
@@ -1356,14 +1354,12 @@ const videos = document.querySelectorAll('video');
 
 videos.forEach(video => {
   video.addEventListener('play', () => {
-    // Pause any other memory video.
     videos.forEach(otherVideo => {
       if (otherVideo !== video) {
         otherVideo.pause();
       }
     });
 
-    // Pause the song only if it was playing.
     if (!backgroundMusic.paused) {
       resumeAfterVideo = true;
       backgroundMusic.pause();
@@ -1372,7 +1368,6 @@ videos.forEach(video => {
   });
 
   function handleVideoStopped() {
-    // Wait until every video has stopped.
     if (resumeAfterVideo && !hasPlayingVideo()) {
       if (document.visibilityState === 'hidden') {
         resumeAfterVisibility = true;
@@ -1389,7 +1384,6 @@ videos.forEach(video => {
 // PAUSE WHEN THE VISITOR SWITCHES TABS OR LEAVES THE PAGE
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
-    // Remember whether music should resume when the visitor returns.
     resumeAfterVisibility =
       !backgroundMusic.paused || resumeAfterVideo;
 
@@ -1401,14 +1395,12 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Handle leaving and returning through browser page caching.
+// HANDLE BROWSER PAGE CACHING
 window.addEventListener('pagehide', () => {
   resumeAfterVisibility =
     !backgroundMusic.paused || resumeAfterVideo;
 
   backgroundMusic.pause();
-
-  // Do not reset currentTime.
 });
 
 window.addEventListener('pageshow', () => {
@@ -1423,23 +1415,37 @@ const dateInput = document.getElementById('proposalDate');
 const gateError = document.getElementById('gateError');
 
 // AUTOMATIC DD/MM/YYYY FORMATTING
+// She types numbers only. Slashes appear automatically.
 dateInput.addEventListener('input', function() {
   const digits = this.value.replace(/\D/g, '').slice(0, 8);
 
-  let formatted = digits.slice(0, 2);
+  let formatted = '';
+
+  if (digits.length >= 1) {
+    formatted = digits.slice(0, 2);
+  }
+
+  if (digits.length >= 2) {
+    formatted += '/';
+  }
 
   if (digits.length > 2) {
-    formatted += '/' + digits.slice(2, 4);
+    formatted += digits.slice(2, 4);
+  }
+
+  if (digits.length >= 4) {
+    formatted += '/';
   }
 
   if (digits.length > 4) {
-    formatted += '/' + digits.slice(4, 8);
+    formatted += digits.slice(4, 8);
   }
 
   this.value = formatted;
   gateError.textContent = '';
 });
 
+// CHECK THE PROPOSAL DATE
 dateForm.addEventListener('submit', function(event) {
   event.preventDefault();
 
