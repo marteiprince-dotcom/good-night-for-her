@@ -4,593 +4,511 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080714">
-<meta name="description" content="A little universe filled with our memories, moments and story.">
+<meta name="theme-color" content="#090516">
 <title>Our Little Universe ❤️</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 :root {
-  --bg: #080714;
-  --purple: #a88bff;
-  --pink: #e9a9d4;
-  --white: #f8f3ff;
-  --muted: #aaa1c4;
-  --glass: rgba(255,255,255,.055);
+  --bg: #090516;
+  --panel: rgba(27, 17, 48, .78);
+  --pink: #f5b6dc;
+  --purple: #bd9bff;
+  --white: #fff8ff;
+  --muted: #c6b9d4;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html { scroll-behavior: smooth; }
 
 body {
-  margin: 0;
   background: var(--bg);
   color: var(--white);
   font-family: 'DM Sans', sans-serif;
   overflow-x: hidden;
 }
 
-button, input { font: inherit; }
-button { cursor: pointer; }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(113, 53, 164, .3), transparent 45%),
+    radial-gradient(ellipse at 85% 60%, rgba(179, 58, 131, .2), transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgba(65, 47, 125, .35), transparent 50%),
+    #090516;
+}
 
 #stars {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  z-index: -1;
   pointer-events: none;
-  z-index: 0;
 }
 
-.nebula {
-  position: fixed;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: .15;
-  pointer-events: none;
-  z-index: 0;
+button, input { font: inherit; }
+
+button {
+  cursor: pointer;
+  border: none;
 }
 
-.nebula.one {
-  background: #783edb;
-  top: -230px;
-  left: -180px;
+.serif {
+  font-family: 'Cormorant Garamond', serif;
 }
 
-.nebula.two {
-  background: #c14e9a;
-  right: -250px;
-  top: 40%;
-}
-
-#entrance {
-  position: relative;
-  z-index: 2;
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-  text-align: center;
-  transition: opacity 1s, transform 1s;
-}
-
-.entrance-content {
-  width: 100%;
-  max-width: 520px;
-  animation: appear 1.5s ease both;
-}
-
-.orbit {
-  width: 160px;
-  height: 160px;
-  border: 1px solid rgba(196,164,255,.35);
-  border-radius: 50%;
-  margin: 0 auto 35px;
-  position: relative;
-  display: grid;
-  place-items: center;
-  animation: rotate 22s linear infinite;
-}
-
-.orbit::before, .orbit::after {
-  content: "";
-  position: absolute;
-  border: 1px solid rgba(196,164,255,.22);
-  border-radius: 50%;
-}
-
-.orbit::before { inset: 17px; }
-.orbit::after { inset: 35px; }
-
-.planet {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, #f4d6ff, #9c69d9 45%, #362052);
-  box-shadow: 0 0 35px #b68bff88;
-}
-
-.orbit-dot {
-  position: absolute;
-  top: 17px;
-  left: 24px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #f6c6ed;
-  box-shadow: 0 0 15px #f6c6ed;
-}
-
-.overline {
+.eyebrow {
   color: var(--pink);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .35em;
+  letter-spacing: 4px;
   text-transform: uppercase;
+  font-size: .68rem;
+  font-weight: 600;
 }
 
-h1, h2, h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
-}
-
-.main-title {
-  font-size: clamp(3.4rem, 11vw, 6rem);
-  line-height: .95;
-  margin: 22px 0;
-  letter-spacing: -.04em;
-}
-
-.main-title span {
-  display: block;
-  color: #c5a7ff;
-  font-style: italic;
-}
-
-.subtitle {
-  color: var(--muted);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem;
-  margin: 20px auto 35px;
-}
-
-.login-card {
-  background: rgba(255,255,255,.045);
-  border: 1px solid rgba(193,166,255,.2);
-  border-radius: 22px;
-  padding: 27px 23px;
-  backdrop-filter: blur(18px);
-  box-shadow: 0 20px 70px #0005;
-}
-
-.login-card h2 {
-  font-size: 1.7rem;
-  margin: 0 0 12px;
-}
-
-.login-card p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-#dateInput {
-  width: 100%;
-  margin: 17px 0 12px;
-  padding: 17px;
-  text-align: center;
-  letter-spacing: .13em;
-  color: white;
-  background: rgba(255,255,255,.06);
-  border: 1px solid #8170a5;
-  border-radius: 12px;
-  outline: none;
-}
-
-#dateInput:focus {
-  border-color: #c6a7ff;
-  box-shadow: 0 0 20px #a88bff22;
+.glow {
+  text-shadow: 0 0 25px rgba(245,182,220,.35);
 }
 
 .primary-btn {
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  padding: 16px;
-  background: linear-gradient(110deg,#a987ee,#df9dca);
-  color: #170d25;
-  font-weight: 700;
+  padding: 14px 25px;
+  border-radius: 30px;
+  background: linear-gradient(110deg, #e8a9d1, #b99aff);
+  color: #170c26;
+  font-weight: 600;
   transition: .3s;
 }
 
 .primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px #a987ee44;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(210,150,255,.25);
 }
 
-#error {
-  min-height: 20px;
-  color: #ff9fc7;
-  font-size: 12px;
-}
+/* INTRODUCTION */
 
-.tiny {
-  color: #817895;
-  font-size: 10px;
-  letter-spacing: .15em;
-  margin-top: 25px;
-}
-
-#reveal {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: none;
+#gate {
+  min-height: 100svh;
+  display: grid;
   place-items: center;
-  background: #080714;
+  padding: 24px;
+}
+
+.gate-card {
+  width: min(100%, 440px);
   text-align: center;
-  padding: 25px;
+  padding: 45px 28px;
+  border: 1px solid rgba(225,185,255,.2);
+  border-radius: 28px;
+  background: rgba(17,10,34,.76);
+  box-shadow: 0 0 80px rgba(144,82,190,.13);
+  backdrop-filter: blur(18px);
 }
 
-#reveal.show { display: grid; }
-
-.reveal-inner { animation: appear 2s ease both; }
-
-.reveal-inner h2 {
-  font-size: clamp(3rem,10vw,5rem);
-  margin: 20px 0;
+.planet {
+  width: 105px;
+  height: 105px;
+  margin: 0 auto 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, #f5c1e7, #a46bd3 45%, #35205f 80%);
+  box-shadow: 0 0 45px rgba(194,130,255,.45);
+  animation: float 5s ease-in-out infinite;
 }
 
-.reveal-inner p {
+@keyframes float {
+  50% { transform: translateY(-12px); }
+}
+
+.gate-card h1 {
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 15px 0;
+}
+
+.gate-card p {
   color: var(--muted);
-  line-height: 1.8;
+  line-height: 1.7;
+  margin: 15px 0 25px;
 }
 
-#website {
-  display: none;
-  position: relative;
-  z-index: 1;
+.gate-card input {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid rgba(225,185,255,.3);
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  color: white;
+  text-align: center;
+  letter-spacing: 3px;
+  outline: none;
+  margin-bottom: 15px;
 }
 
-#website.show { display: block; }
+.gate-card input:focus {
+  border-color: var(--pink);
+}
+
+#gateError {
+  color: #ff9bbd;
+  font-size: .85rem;
+  min-height: 22px;
+  margin-top: 12px;
+}
+
+/* MAIN SITE */
+
+#mainSite { display: none; }
 
 nav {
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  padding: 16px clamp(18px,5vw,65px);
-  background: rgba(8,7,20,.88);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid #ffffff12;
+  padding: 15px 6%;
+  background: rgba(9,5,22,.82);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
 }
 
-.logo {
+.brand {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.35rem;
-  color: #d5baff;
+  color: var(--pink);
+  font-size: 1.4rem;
   white-space: nowrap;
 }
 
 .nav-links {
   display: flex;
-  gap: 22px;
-  align-items: center;
+  gap: 18px;
+  overflow-x: auto;
 }
 
 .nav-links a {
   text-decoration: none;
   color: var(--muted);
-  font-size: 11px;
-}
-
-.nav-links a:hover { color: white; }
-
-.music-btn {
-  border: 1px solid #ffffff30;
-  color: white;
-  background: #ffffff0c;
-  padding: 9px 13px;
-  border-radius: 30px;
-  font-size: 11px;
+  font-size: .78rem;
   white-space: nowrap;
 }
 
+.nav-links a:hover { color: var(--pink); }
+
+section {
+  padding: 100px 7%;
+  scroll-margin-top: 70px;
+}
+
 .hero {
-  min-height: 90vh;
+  min-height: 85vh;
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 70px 22px;
 }
 
+.hero-inner { max-width: 850px; }
+
 .hero h1 {
-  font-size: clamp(4rem,12vw,8rem);
-  line-height: .9;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 12vw, 8rem);
+  font-weight: 400;
+  line-height: .95;
   margin: 25px 0;
 }
 
-.hero h1 span {
-  display: block;
-  color: #c3a2ff;
-  font-style: italic;
-}
+.hero h1 span { color: var(--pink); }
 
-.hero-description {
+.hero p {
+  max-width: 550px;
+  margin: 20px auto 30px;
   color: var(--muted);
-  max-width: 460px;
   line-height: 1.9;
-  margin: 25px auto;
 }
 
-.date-label {
+.scroll-note {
+  margin-top: 65px;
+  color: var(--muted);
+  font-size: .7rem;
+  letter-spacing: 3px;
+}
+
+/* CHAPTERS */
+
+.chapter {
+  max-width: 850px;
+  margin: auto;
+}
+
+.chapter-number {
+  color: var(--purple);
+  font-size: .72rem;
+  letter-spacing: 4px;
+  margin-bottom: 15px;
+}
+
+.chapter h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.7rem, 7vw, 4.7rem);
+  font-weight: 400;
+  line-height: 1;
   color: var(--pink);
-  font-size: 11px;
-  letter-spacing: .25em;
+  margin-bottom: 12px;
 }
 
-.scroll-link {
-  display: inline-block;
-  margin-top: 35px;
-  color: #d4baff;
-  text-decoration: none;
-  font-size: 12px;
+.chapter-subtitle {
+  color: var(--muted);
+  font-size: .72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 35px;
 }
 
-.section {
+.story-card {
+  background: var(--panel);
+  border: 1px solid rgba(225,185,255,.13);
+  padding: clamp(25px, 5vw, 48px);
+  border-radius: 22px;
+  line-height: 2;
+  color: #e8dfee;
+  font-size: 1rem;
+}
+
+.story-card p { margin-bottom: 20px; }
+
+.story-card p:last-child { margin-bottom: 0; }
+
+.story-card em { color: var(--pink); }
+
+.story-highlight {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.65rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--pink);
+  margin: 30px 0;
+}
+
+.chapter-divider {
+  width: 65px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pink), transparent);
+  margin: 75px auto;
+}
+
+/* MEMORIES */
+
+.center-heading {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.center-heading h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
+  font-weight: 400;
+  color: var(--pink);
+  margin-top: 12px;
+}
+
+.center-heading p {
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.gallery {
   max-width: 1050px;
   margin: auto;
-  padding: 100px 25px;
-}
-
-.section-heading {
-  text-align: center;
-  margin-bottom: 55px;
-}
-
-.section-heading h2 {
-  font-size: clamp(2.8rem,7vw,4.5rem);
-  margin: 14px 0;
-}
-
-.section-heading p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.timeline {
-  position: relative;
-  max-width: 700px;
-  margin: auto;
-}
-
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(transparent,#a88bff,#e9a9d4,transparent);
-}
-
-.timeline-item {
-  position: relative;
-  padding: 0 0 45px 40px;
-}
-
-.timeline-item::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 6px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: #c2a0ff;
-  box-shadow: 0 0 15px #a88bff;
-}
-
-.timeline-item small {
-  color: var(--pink);
-  letter-spacing: .12em;
-  font-size: 10px;
-}
-
-.timeline-item h3 {
-  font-size: 2rem;
-  margin: 9px 0;
-}
-
-.timeline-item p {
-  color: var(--muted);
-  line-height: 1.8;
-  font-size: 13px;
-}
-
-/* MEMORY GALLERY */
-
-.memory-intro {
-  text-align: center;
-  max-width: 550px;
-  margin: -25px auto 40px;
-  color: var(--muted);
-  line-height: 1.8;
-  font-size: 13px;
-}
-
-.memory-grid {
   display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
 }
 
 .memory-card {
-  border: 1px solid #ffffff20;
-  border-radius: 19px;
   overflow: hidden;
-  background: linear-gradient(140deg,#171329,#100d20);
-  position: relative;
-  transition: transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.1);
 }
 
-.memory-card:hover {
-  transform: translateY(-6px);
-  border-color: #c3a2ff77;
-  box-shadow: 0 18px 45px #0006;
-}
-
-.memory-media {
-  display: block;
+.memory-card img,
+.memory-card video {
   width: 100%;
-  height: 330px;
+  display: block;
   object-fit: cover;
-  background: #100d20;
+  background: #160d27;
 }
 
-.memory-media.video {
-  object-fit: contain;
-}
+.memory-card img { aspect-ratio: 4 / 5; }
 
-video.memory-media {
-  outline: none;
-}
+.memory-card video { aspect-ratio: 16 / 10; }
 
 .memory-caption {
-  padding: 19px 21px 22px;
-  background: linear-gradient(140deg,#171329,#100d20);
-}
-
-.memory-caption small {
-  display: block;
-  color: var(--pink);
-  font-size: 9px;
-  letter-spacing: .2em;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.memory-caption h3 {
-  font-size: 1.8rem;
-  margin: 0 0 6px;
-  color: #f8f3ff;
-}
-
-.memory-caption p {
-  color: #d0c5dd;
-  font-size: 12px;
-  line-height: 1.7;
-  margin: 0;
-}
-
-.gallery-note {
+  padding: 17px;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
   text-align: center;
-  color: #a89cbd;
-  font-family: 'Cormorant Garamond',serif;
-  font-size: 1.2rem;
-  font-style: italic;
-  margin-top: 35px;
+}
+
+/* MUSIC */
+
+.music-section {
+  max-width: 750px;
+  margin: auto;
+  text-align: center;
+}
+
+.music-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--pink);
+  font-size: clamp(2.7rem, 7vw, 4rem);
+  font-weight: 400;
+  margin: 15px 0;
+}
+
+.music-section p {
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+
+.youtube-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(245,182,220,.25);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #10091e;
+}
+
+.youtube-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 /* LETTER */
 
-.letter-wrap {
-  max-width: 650px;
+.letter {
+  max-width: 850px;
   margin: auto;
-  border: 1px solid #c2a0ff35;
-  background: linear-gradient(140deg,#171329,#100d20);
-  border-radius: 20px;
-  padding: clamp(25px,6vw,55px);
-  box-shadow: 0 25px 80px #0005;
+  padding: clamp(25px, 6vw, 60px);
+  background: linear-gradient(145deg, rgba(48,27,69,.8), rgba(20,12,39,.9));
+  border: 1px solid rgba(245,182,220,.2);
+  border-radius: 24px;
+  box-shadow: 0 0 65px rgba(172,105,208,.09);
 }
 
-.letter-wrap h3 {
-  color: #e5b4dd;
-  font-size: 2rem;
+.letter h2 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--pink);
+  font-size: clamp(2.7rem, 8vw, 4.5rem);
+  font-weight: 400;
+  margin: 15px 0 30px;
 }
 
-.letter-wrap p {
-  color: #d2c8df;
+.letter-content {
+  color: #e8dfee;
   line-height: 2;
-  font-family: 'Cormorant Garamond',serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
-.signature-end {
-  text-align: right;
-  color: #d6a8ed !important;
-  font-style: italic;
-}
+.letter-content p { margin-bottom: 22px; }
 
-.final-section {
+.letter-content strong { color: var(--pink); }
+
+/* ENDING */
+
+.ending {
+  min-height: 90vh;
+  display: grid;
+  place-items: center;
   text-align: center;
-  padding: 130px 25px;
 }
 
-.final-section h2 {
-  font-size: clamp(3.5rem,10vw,6rem);
-  margin: 20px 0;
+.ending-inner { max-width: 750px; }
+
+.ending h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 12vw, 7rem);
+  font-weight: 400;
+  color: var(--pink);
+  line-height: 1;
+  margin: 25px 0;
 }
 
-.final-section h2 span { color: #c4a3ff; }
-
-.final-section p {
+.ending p {
   color: var(--muted);
-  line-height: 1.9;
+  line-height: 2;
+  margin: 15px 0;
+}
+
+.ending .final-love {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-style: italic;
+  color: #ffb9df;
+  text-shadow: 0 0 35px rgba(245,182,220,.4);
+  margin-top: 50px;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { text-shadow: 0 0 55px rgba(245,182,220,.8); }
 }
 
 footer {
   text-align: center;
-  padding: 30px;
-  color: #837b9a;
-  font-size: 10px;
-  letter-spacing: .12em;
-  border-top: 1px solid #ffffff10;
+  padding: 25px;
+  color: #8f819f;
+  font-size: .75rem;
 }
 
-.fade {
+.reveal {
   opacity: 0;
   transform: translateY(25px);
-  transition: opacity .9s ease,transform .9s ease;
+  transition: opacity .9s ease, transform .9s ease;
 }
 
-.fade.visible {
+.reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-@keyframes rotate {
-  to { transform: rotate(360deg); }
+@media (max-width: 700px) {
+  nav {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 13px 5%;
+  }
+
+  .nav-links {
+    width: 100%;
+    gap: 17px;
+    padding-bottom: 3px;
+  }
+
+  section { padding: 75px 6%; }
+
+  .hero { min-height: 78vh; }
+
+  .gallery { grid-template-columns: 1fr; }
+
+  .story-card { line-height: 1.85; }
+
+  .chapter-divider { margin: 55px auto; }
 }
 
-@keyframes appear {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media(max-width:750px) {
-  nav { flex-wrap: wrap; }
-  .nav-links { display: none; }
-}
-
-@media(max-width:650px) {
-  .memory-grid { grid-template-columns: 1fr; }
-  .memory-media { height: 290px; }
-  .section { padding: 75px 22px; }
-  .memory-card:hover { transform: none; }
-}
-
-@media(prefers-reduced-motion:reduce) {
-  *,*::before,*::after {
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
@@ -602,423 +520,585 @@ footer {
 <body>
 
 <canvas id="stars"></canvas>
-<div class="nebula one"></div>
-<div class="nebula two"></div>
 
-<!-- SECRET ENTRANCE -->
+<!-- DATE ENTRANCE -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="planet"></div>
+    <div class="eyebrow">A little universe, just for you</div>
+    <h1 class="serif glow">Our Little<br><span style="color:#f5b6dc">Universe</span></h1>
+    <p>Before you enter, there's one little date I hope you remember.</p>
+    <p style="color:#f5b6dc">What's the official date of our proposal?</p>
 
-<main id="entrance">
-  <div class="entrance-content">
-
-    <div class="orbit">
-      <div class="planet"></div>
-      <div class="orbit-dot"></div>
-    </div>
-
-    <p class="overline">A universe built for two</p>
-
-    <h1 class="main-title">
-      Our Little
-      <span>Universe.</span>
-    </h1>
-
-    <p class="subtitle">
-      Somewhere between fate and forever, there was us.
-    </p>
-
-    <div class="login-card">
-      <h2>A little question...</h2>
-
-      <p>
-        Before you enter our universe, tell me something
-        only we should know.
-      </p>
-
-      <label for="dateInput" class="overline">
-        What's the official date of our proposal?
-      </label>
-
+    <form id="dateForm">
       <input
-        id="dateInput"
+        id="proposalDate"
         type="text"
-        inputmode="numeric"
-        maxlength="10"
         placeholder="DD/MM/YYYY"
         autocomplete="off"
+        maxlength="10"
+        required
       >
-
-      <button class="primary-btn" id="unlockBtn">
-        UNLOCK OUR UNIVERSE ✦
-      </button>
-
-      <div id="error" role="status" aria-live="polite"></div>
-    </div>
-
-    <p class="tiny">
-      MADE OF MEMORIES · HELD TOGETHER BY LOVE
-    </p>
-
-  </div>
-</main>
-
-<!-- CINEMATIC TRANSITION -->
-
-<div id="reveal">
-  <div class="reveal-inner">
-    <p class="overline">ACCESS GRANTED ✦</p>
-    <h2>You remembered. ❤️</h2>
-    <p>
-      Some dates are impossible to forget.<br>
-      Welcome to our little universe.
-    </p>
+      <button class="primary-btn" type="submit">Enter Our Universe ✨</button>
+    </form>
+    <div id="gateError"></div>
   </div>
 </div>
 
 <!-- MAIN WEBSITE -->
+<div id="mainSite">
 
-<div id="website">
+<nav>
+  <div class="brand">Our Little Universe ♡</div>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#beginning">Our Beginning</a>
+    <a href="#yes">The Yes</a>
+    <a href="#memories">Memories</a>
+    <a href="#letter">My Letter</a>
+  </div>
+</nav>
 
-  <nav>
-    <div class="logo">Our Little Universe ✦</div>
+<!-- HOME -->
+<section class="hero" id="home">
+  <div class="hero-inner reveal">
+    <div class="eyebrow">20 November 2025 — 20 November 2026</div>
+    <h1>One year of<br><span>our little universe.</span></h1>
+    <p>
+      Some stories are planned. Others happen unexpectedly.
+      Ours began with an unexpected connection, an unforgettable hug
+      and a message that changed everything.
+    </p>
+    <a href="#beginning">
+      <button class="primary-btn">Explore Our Story ✨</button>
+    </a>
+    <div class="scroll-note">SCROLL TO EXPLORE OUR MEMORIES ↓</div>
+  </div>
+</section>
 
-    <div class="nav-links">
-      <a href="#home">HOME</a>
-      <a href="#beginning">OUR STORY</a>
-      <a href="#memories">MEMORIES</a>
-      <a href="#letter">MY LETTER</a>
-    </div>
+<!-- CHAPTER 01 -->
+<section id="beginning">
+  <div class="chapter reveal">
+    <div class="chapter-number">CHAPTER 01</div>
+    <h2>The Hug That Changed Everything</h2>
+    <div class="chapter-subtitle">Some stories begin without a plan</div>
 
-    <button class="music-btn" id="musicBtn">
-      ♫ MUSIC OFF
-    </button>
-  </nav>
-
-  <!-- HOME -->
-
-  <section class="hero" id="home">
-    <div class="fade">
-
-      <p class="overline">20 · 11 · 2025</p>
-
-      <h1>
-        Every universe<br>
-        <span>has a story.</span>
-      </h1>
-
-      <p class="hero-description">
-        And somehow, in this endless universe,
-        I found someone who made my little world
-        feel like everything.
-      </p>
-
-      <p class="date-label">
-        ONE YEAR OF US · ONE BEAUTIFUL BEGINNING
-      </p>
-
-      <a class="scroll-link" href="#beginning">
-        EXPLORE OUR STORY ↓
-      </a>
-
-    </div>
-  </section>
-
-  <!-- STORY -->
-
-  <section class="section" id="beginning">
-
-    <div class="section-heading fade">
-      <p class="overline">CHAPTER ONE</p>
-      <h2>Where it all began.</h2>
+    <div class="story-card">
       <p>
-        Every beautiful story has a beginning.
-        This one is ours.
+        I never imagined that someone I would eventually call my favourite
+        person would come into my life the way you did.
       </p>
-    </div>
 
-    <div class="timeline">
-
-      <article class="timeline-item fade">
-        <small>20 NOVEMBER 2025</small>
-        <h3>The beginning of us.</h3>
-        <p>
-          The day our story officially became something special.
-          A date that will always have a place in my heart.
-        </p>
-      </article>
-
-      <article class="timeline-item fade">
-        <small>CHAPTER TWO</small>
-        <h3>Our little moments.</h3>
-        <p>
-          The conversations, the laughter, the unexpected moments
-          and everything that made our journey ours.
-        </p>
-      </article>
-
-      <article class="timeline-item fade">
-        <small>CHAPTER THREE</small>
-        <h3>One year later.</h3>
-        <p>
-          Here we are, with a whole collection of memories
-          and so many more chapters waiting to be written.
-        </p>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- MEMORIES GALLERY -->
-
-  <section class="section" id="memories">
-
-    <div class="section-heading fade">
-      <p class="overline">OUR LITTLE COLLECTION</p>
-      <h2>Moments in our universe.</h2>
       <p>
-        Little memories that deserve a permanent place.
+        At first, we were just two people who happened to cross paths.
+        Life had its own plans, and somehow, even when things didn't go
+        as expected, you remained.
+      </p>
+
+      <p>
+        Then came those days at 37 Military Hospital. You were there,
+        staying close to your mum, and somewhere in the middle of
+        everything happening, we found ourselves talking more.
+      </p>
+
+      <p>
+        One day, you asked me to come see you. I still remember that moment.
+        The moment you saw me, you came over and hugged me.
+      </p>
+
+      <p>
+        Maybe to you, it was just a hug. But to me, it felt like something
+        I had never experienced before. There was a warmth in that moment
+        that words couldn't explain. For a little while, everything else
+        seemed to disappear.
+      </p>
+
+      <div class="story-highlight">
+        I didn't just feel a hug. I felt a connection.
+      </div>
+
+      <p>
+        And somewhere in that moment, I realised that what I felt for you
+        was becoming something special.
+      </p>
+
+      <p>
+        When we returned to school, our closeness grew. The conversations
+        became more meaningful, the bond became stronger, and without even
+        realising it, you were becoming someone I couldn't imagine overlooking.
+      </p>
+
+      <p>
+        Then came November 20, 2025. I gathered the courage to ask you
+        to be mine officially. It wasn't a grand stage or a dramatic moment.
+        Just a message, sent with feelings that were much bigger than
+        the words on the screen.
+      </p>
+
+      <p>
+        And that was how our story officially began.
+      </p>
+
+      <div class="story-highlight">
+        One message. One unforgettable hug. One beginning I wouldn't trade.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER 02 -->
+<section id="yes">
+  <div class="chapter reveal">
+    <div class="chapter-number">CHAPTER 02</div>
+    <h2>And Then You Said Yes</h2>
+    <div class="chapter-subtitle">20 November 2025 · The day we became us</div>
+
+    <div class="story-card">
+      <p>
+        And then, there was your yes.
+      </p>
+
+      <p>
+        A simple message, a question filled with feelings, and a reply
+        that would forever become part of my favourite memories.
+      </p>
+
+      <div class="story-highlight">You said yes. ❤️</div>
+
+      <p>
+        And just like that, something that had been quietly growing between
+        us finally had a name. We became something more than two people
+        who enjoyed each other's company. We became two people choosing
+        to give this connection a chance.
+      </p>
+
+      <p>
+        Life at school continued as usual. There were no grand celebrations
+        or extraordinary moments every day. We simply kept seeing each other,
+        sharing little moments, talking, laughing and finding comfort in
+        knowing we had each other.
+      </p>
+
+      <p>
+        But perhaps that's what made those days beautiful.
+        We didn't need every moment to be extraordinary.
+        Having you around was already something special.
+      </p>
+
+      <div class="story-highlight">
+        That yes wasn't just an answer to a question.
+        It was the beginning of my favourite chapter.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER 03 -->
+<section>
+  <div class="chapter reveal">
+    <div class="chapter-number">CHAPTER 03</div>
+    <h2>The Little Things I Miss</h2>
+    <div class="chapter-subtitle">Our school days · The memories that stay</div>
+
+    <div class="story-card">
+      <p>
+        If someone asked me what I miss most about our school days,
+        I wouldn't know where to begin.
+      </p>
+
+      <p>
+        Maybe I'd start with those little belt arguments. The days you'd
+        forget or refuse to tie your belt, and I'd insist that you did.
+        You probably thought I was being difficult, but those little
+        moments became part of our own language.
+      </p>
+
+      <p>
+        Or perhaps I'd talk about how you'd walk all the way from the
+        girls' side to the juniors' block just to see me.
+        Even coming to my classroom wasn't too much for you.
+      </p>
+
+      <p>
+        And then came our little arguments:
+        <em>Who was supposed to visit whose classroom?</em>
+      </p>
+
+      <p>
+        Neither of us wanted to lose that argument. Looking back,
+        I think we both just wanted an excuse to see each other.
+      </p>
+
+      <p>
+        But then came the day you had to leave school because of the suspension.
+        That day felt different.
+      </p>
+
+      <p>
+        The thought of not seeing you around, not having those little moments
+        and not knowing when things would feel normal again weighed heavily
+        on me. I wanted to let my emotions out, but I knew I also had to
+        be strong for you.
+      </p>
+
+      <p>
+        So I tried to be strong, because I knew you needed strength too.
+      </p>
+
+      <div class="story-highlight">
+        Even on the days when we couldn't be together,
+        you never stopped being someone I wanted close to me.
+      </div>
+
+      <p>
+        Some memories make us smile. Others remind us just how much
+        someone means to us.
       </p>
     </div>
+  </div>
+</section>
 
-    <p class="memory-intro fade">
-      Some memories are captured in pictures.
-      Others are better remembered in motion.
-      Every one of them belongs here.
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER 04 -->
+<section>
+  <div class="chapter reveal">
+    <div class="chapter-number">CHAPTER 04</div>
+    <h2>The Little Things That Made Me Fall</h2>
+    <div class="chapter-subtitle">More than words · More than memories</div>
+
+    <div class="story-card">
+      <p>
+        They say every relationship has a beautiful beginning.
+        But I honestly believe mine had the nicest.
+      </p>
+
+      <p>
+        There were so many little things about you that made you special
+        to me. I admired how you wanted to do things on your own,
+        how you stood for what you believed in, and how you weren't
+        afraid to tell me when something wasn't right.
+      </p>
+
+      <p>
+        I loved that you could call me and say,
+        <em>"Babe, what you're doing isn't good. I don't like it."</em>
+        You didn't just keep quiet about things; you cared enough
+        to let me know.
+      </p>
+
+      <p>And those little reminders!</p>
+
+      <p>
+        Sometimes, when I forgot to tell you I loved you, you'd call and say,
+        <em>"Hey, you didn't tell me you love me."</em>
+      </p>
+
+      <p>How could I forget that?</p>
+
+      <p>
+        I loved our gossip sessions, too. You always had something to say,
+        even on days when I barely had words. Somehow, you could keep
+        a conversation going, and I could just listen to you talk.
+      </p>
+
+      <p>You brought a certain kind of life into my ordinary days.</p>
+
+      <p>
+        But I know things haven't remained the same. We've had arguments,
+        misunderstandings and moments that have changed the way we relate
+        to each other.
+      </p>
+
+      <p>
+        I won't put all the blame on you. I know there were times when
+        you gave more than I did. I know my effort was small in moments
+        when I could have done better. And perhaps, with time, some of that
+        changed how you felt and how much you were willing to give.
+      </p>
+
+      <p>
+        I can feel the distance now. Sometimes, it feels like you've drawn
+        back a little, and honestly, I miss the version of us that used
+        to feel so close.
+      </p>
+
+      <p>But I don't want this chapter to become a list of complaints.</p>
+
+      <p>
+        I want you to remember that I noticed those little things.
+        Your calls. Your corrections. Your reminders. Your endless stories.
+        Your determination.
+      </p>
+
+      <div class="story-highlight">
+        I noticed more than I probably said,
+        and I appreciate more than I probably showed.
+      </div>
+
+      <p>
+        And even though some things have changed, I will never pretend
+        that the beautiful parts of us didn't happen.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- PHOTO AND VIDEO MEMORIES -->
+<section id="memories">
+  <div class="center-heading reveal">
+    <div class="eyebrow">A collection of little moments</div>
+    <h2>Our Favourite Memories</h2>
+    <p>Some moments deserve to be kept forever.</p>
+  </div>
+
+  <div class="gallery reveal">
+
+    <div class="memory-card">
+      <img
+        src="assets/images/0eebc0e7-5559-4463-9b8a-983bbbe6e146.jpg"
+        alt="One of our memories"
+        loading="lazy"
+      >
+      <div class="memory-caption">A moment worth keeping ❤️</div>
+    </div>
+
+    <div class="memory-card">
+      <img
+        src="assets/images/71f0fa78-72f8-4548-9e04-7c6ecdf4a2c2.jpg"
+        alt="Another special memory"
+        loading="lazy"
+      >
+      <div class="memory-caption">A little piece of our story.</div>
+    </div>
+
+    <div class="memory-card">
+      <video controls playsinline preload="metadata">
+        <source src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.53%20AM.mp4" type="video/mp4">
+        Your browser does not support this video.
+      </video>
+      <div class="memory-caption">A memory in motion ✨</div>
+    </div>
+
+    <div class="memory-card">
+      <video controls playsinline preload="metadata">
+        <source src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.56%20AM%20%282%29.mp4" type="video/mp4">
+        Your browser does not support this video.
+      </video>
+      <div class="memory-caption">Another moment to remember.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- OUR SONG -->
+<section id="ourSong">
+  <div class="music-section reveal">
+    <div class="eyebrow">A song you love</div>
+    <h2>Our Little Soundtrack</h2>
+    <p>
+      Some songs remind us of certain people.
+      This one is here because I know you love it.
+      So, let's make it part of our little universe.
     </p>
 
-    <div class="memory-grid">
-
-      <!-- PHOTO ONE -->
-
-      <article class="memory-card fade">
-
-        <img
-          class="memory-media"
-          src="assets/images/0eebc0e7-5559-4463-9b8a-983bbbe6e146.jpg"
-          alt="A special mirror picture memory"
-          loading="lazy"
-        >
-
-        <div class="memory-caption">
-          <small>PHOTO MEMORY 01</small>
-          <h3>Our little moment.</h3>
-          <p>
-            A picture, a moment and a memory worth keeping.
-          </p>
-        </div>
-
-      </article>
-
-      <!-- PHOTO TWO -->
-
-      <article class="memory-card fade">
-
-        <img
-          class="memory-media"
-          src="assets/images/71f0fa78-72f8-4548-9e04-7c6ecdf4a2c2.jpg"
-          alt="A treasured moment together"
-          loading="lazy"
-        >
-
-        <div class="memory-caption">
-          <small>PHOTO MEMORY 02</small>
-          <h3>Closer than words.</h3>
-          <p>
-            Some moments say everything without saying a word.
-          </p>
-        </div>
-
-      </article>
-
-      <!-- VIDEO ONE -->
-
-      <article class="memory-card fade">
-
-        <video
-          class="memory-media video"
-          controls
-          playsinline
-          preload="metadata"
-        >
-          <source
-            src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.53%20AM.mp4"
-            type="video/mp4"
-          >
-          Your browser does not support this video.
-        </video>
-
-        <div class="memory-caption">
-          <small>VIDEO MEMORY 01</small>
-          <h3>A moment in motion.</h3>
-          <p>
-            Press play and relive this little memory.
-          </p>
-        </div>
-
-      </article>
-
-      <!-- VIDEO TWO -->
-
-      <article class="memory-card fade">
-
-        <video
-          class="memory-media video"
-          controls
-          playsinline
-          preload="metadata"
-        >
-          <source
-            src="assets/videos/WhatsApp%20Video%202026-11-19%20at%2010.55.56%20AM%20%282%29.mp4"
-            type="video/mp4"
-          >
-          Your browser does not support this video.
-        </video>
-
-        <div class="memory-caption">
-          <small>VIDEO MEMORY 02</small>
-          <h3>Another favourite moment.</h3>
-          <p>
-            Another little piece of our story, saved forever.
-          </p>
-        </div>
-
-      </article>
-
+    <div class="youtube-frame">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/PcP2wu1EQqw"
+        title="Ayox - Need You to Stay Visualizer"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
     </div>
 
-    <p class="gallery-note fade">
-      Four memories. One little universe. Infinite meaning. ✦
+    <p style="margin-top:18px;font-size:.8rem">
+      Ayox — Need You to Stay
     </p>
+  </div>
+</section>
 
-  </section>
+<!-- FINAL LETTER -->
+<section id="letter">
+  <div class="letter reveal">
+    <div class="eyebrow">A message from my heart</div>
+    <h2>If You Could Read My Heart</h2>
 
-  <!-- LETTER -->
+    <div class="letter-content">
+      <p>
+        There are so many things I wish I could put into words,
+        but sometimes words never seem enough.
+      </p>
 
-  <section class="section" id="letter">
+      <p>
+        If I could take you back to the beginning, I'd show you that
+        hug at 37 Military Hospital. I'd show you the little classroom
+        visits, our silly arguments about whose class to visit,
+        your random calls, our gossip sessions and those little moments
+        that probably seemed ordinary at the time.
+      </p>
 
-    <div class="section-heading fade">
-      <p class="overline">A MESSAGE FROM MY HEART</p>
-      <h2>Dear you...</h2>
+      <p>
+        I'd show you the girl who would call just to remind me
+        that I hadn't said I loved her.
+      </p>
+
+      <p>
+        And perhaps then you'd understand why those memories
+        mean so much to me.
+      </p>
+
+      <p>
+        I wouldn't say everything has been perfect. We've had our arguments,
+        misunderstandings and even moments that brought us close to walking
+        away from each other.
+      </p>
+
+      <p>
+        I know there were times I exaggerated certain things or complained
+        more than I should have. Sometimes, it was because I wanted the best
+        for you and for us. I wanted to see us grow, I wanted things to work,
+        and honestly, I didn't want to lose what we had. But I understand
+        that even when intentions are good, the way we express ourselves matters.
+      </p>
+
+      <p>
+        I'm not saying this to justify every argument or put the blame on you.
+        I know I have things to learn, too.
+      </p>
+
+      <p>
+        One thing I truly wish for us is that, no matter what disagreement
+        comes our way, we never forget to choose each other through
+        understanding, honesty and communication.
+      </p>
+
+      <p>
+        Let's learn to listen before reacting, understand before assuming,
+        and communicate instead of allowing silence or misunderstandings
+        to create distance between us.
+      </p>
+
+      <p>
+        I don't expect us to be perfect. I just believe that two people
+        who genuinely value each other should always be willing to
+        communicate and understand one another.
+      </p>
+
+      <p>
+        I know things aren't exactly how they used to be. We've had
+        our difficult moments, and I know I haven't always given
+        the effort I should have. I'm not writing this to blame you
+        or pretend that everything is perfect.
+      </p>
+
+      <p>
+        I'm writing because I don't want the difficult chapters
+        to erase the beautiful beginning.
+      </p>
+
+      <p>
+        Thank you for the laughter, the conversations, the memories
+        and the little ways you made ordinary days special.
+      </p>
+
+      <p>
+        If there's one thing I hope you take away from this little universe
+        I've created, it's that you were never just another person in my life.
+        You became a beautiful part of my story.
+      </p>
+
+      <p>
+        And no matter how much time passes, I'll always be grateful
+        that our paths crossed.
+      </p>
+
+      <p><strong>Happy Anniversary to us. ❤️</strong></p>
+
+      <p>
+        Here's to the memories we've made, the lessons we've learnt
+        and whatever beautiful pages life still has waiting for us.
+      </p>
     </div>
+  </div>
+</section>
 
-    <article class="letter-wrap fade">
+<!-- FINAL SCENE -->
+<section class="ending">
+  <div class="ending-inner reveal">
+    <div class="eyebrow">20 November 2025 — 20 November 2026</div>
 
-      <h3>To my favourite person,</h3>
-
-      <p>
-        If someone had told me that one day I would create an entire
-        little universe just to celebrate someone, I probably would
-        have laughed.
-      </p>
-
-      <p>
-        But here I am, turning memories into pages, moments into
-        stars, and feelings into something you can visit whenever
-        you want.
-      </p>
-
-      <p>
-        Thank you for being part of this chapter of my life.
-        Thank you for the memories, the laughter and all the little
-        things that make this journey special.
-      </p>
-
-      <p>
-        This website is just a small reminder that our story matters
-        to me, and that I look forward to all the beautiful chapters
-        still ahead of us.
-      </p>
-
-      <p class="signature-end">
-        With love, always. ❤️
-      </p>
-
-    </article>
-
-  </section>
-
-  <!-- ENDING -->
-
-  <section class="final-section fade">
-
-    <p class="overline">
-      ONE YEAR · COUNTLESS MEMORIES
-    </p>
-
-    <h2>
-      To us,<br>
-      <span>and beyond.</span>
-    </h2>
+    <h2>One More Chapter</h2>
 
     <p>
-      In a universe full of stars,<br>
-      I'm grateful our paths crossed.
+      We've made memories, shared laughter, had disagreements,
+      and grown in ways we never expected.
     </p>
 
-    <p style="color:#d4a9e9;margin-top:35px">
+    <p>
+      If our story has taught me anything, it's that the most beautiful
+      things aren't always perfect. Sometimes, they're simply worth appreciating.
+    </p>
+
+    <p>Thank you for being part of my story.</p>
+
+    <h2 style="font-size:clamp(2.5rem,8vw,4.5rem)">
       Happy 1st Anniversary, my love. ❤️
-    </p>
+    </h2>
 
-    <p style="font-size:12px;margin-top:50px">
-      OUR LITTLE UNIVERSE · EST. 20.11.2025
-    </p>
+    <p>Our story. Our memories. Our little universe.</p>
 
-  </section>
+    <div class="final-love">I LOVE YOU ❤️</div>
 
-  <footer>
-    DESIGNED WITH CODE · CREATED WITH LOVE · FOREVER OURS ✦
-  </footer>
+    <button class="primary-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="margin-top:35px">
+      Revisit Our Memories ✨
+    </button>
+  </div>
+</section>
+
+<footer>
+  Made with love · Our Little Universe · 2026
+</footer>
 
 </div>
 
-<!-- BACKGROUND MUSIC -->
-
-<audio
-  id="ambientAudio"
-  loop
-  preload="none"
-  src="assets/music/ambient.mp3">
-</audio>
-
 <script>
-
-// COSMIC STARFIELD
-
+// STARFIELD
 const canvas = document.getElementById('stars');
 const ctx = canvas.getContext('2d');
-
 let stars = [];
 
 function resizeStars() {
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 
-  canvas.width = window.innerWidth * ratio;
-  canvas.height = window.innerHeight * ratio;
-
-  ctx.setTransform(ratio,0,0,ratio,0,0);
-
-  stars = Array.from({length:120}, () => ({
+  stars = Array.from({length: 130}, () => ({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    size: Math.random() * 1.7 + .3,
-    alpha: Math.random() * .8 + .2,
+    radius: Math.random() * 1.4 + .2,
+    alpha: Math.random(),
     speed: Math.random() * .008 + .002
   }));
 }
 
 function drawStars() {
-  ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
   stars.forEach(star => {
     star.alpha += star.speed;
-
-    if(star.alpha > 1 || star.alpha < .15) {
-      star.speed *= -1;
-    }
+    const opacity = .25 + Math.abs(Math.sin(star.alpha)) * .65;
 
     ctx.beginPath();
-    ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
-
-    ctx.fillStyle = `rgba(218,198,255,${star.alpha})`;
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,225,255,${opacity})`;
     ctx.fill();
   });
 
@@ -1027,149 +1107,63 @@ function drawStars() {
 
 resizeStars();
 drawStars();
+window.addEventListener('resize', resizeStars);
 
-window.addEventListener('resize',resizeStars);
+// DATE GATE
+const dateForm = document.getElementById('dateForm');
+const dateInput = document.getElementById('proposalDate');
+const gateError = document.getElementById('gateError');
 
+dateForm.addEventListener('submit', function(event) {
+  event.preventDefault();
 
-// DATE ACCESS
+  const enteredDate = dateInput.value.trim();
 
-const input = document.getElementById('dateInput');
-const button = document.getElementById('unlockBtn');
-const error = document.getElementById('error');
+  if (enteredDate === '20/11/2025') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('mainSite').style.display = 'block';
+    document.body.style.overflowX = 'hidden';
 
-function unlock() {
-
-  const answer = input.value.trim();
-
-  if(answer !== '20/11/2025') {
-    error.textContent =
-      'Not quite... think of our special day again. ♡';
-
-    input.value = '';
-    input.focus();
-    return;
+    window.scrollTo(0, 0);
+    observeSections();
+  } else {
+    gateError.textContent = "Not quite. Think back to the day you said yes. ❤️";
+    dateInput.value = '';
+    dateInput.focus();
   }
-
-  error.textContent = '';
-
-  document.getElementById('entrance').style.opacity = '0';
-  document.getElementById('entrance').style.transform = 'scale(1.04)';
-
-  setTimeout(() => {
-
-    document.getElementById('entrance').style.display = 'none';
-
-    const reveal = document.getElementById('reveal');
-    reveal.classList.add('show');
-
-    setTimeout(() => {
-
-      reveal.classList.remove('show');
-
-      document.getElementById('website').classList.add('show');
-
-      window.scrollTo(0,0);
-
-      observeSections();
-
-    },3200);
-
-  },900);
-
-}
-
-button.addEventListener('click',unlock);
-
-input.addEventListener('keydown',event => {
-  if(event.key === 'Enter') unlock();
 });
 
+// PAUSE OTHER VIDEOS WHEN ONE PLAYS
+const videos = document.querySelectorAll('video');
 
-// SCROLL ANIMATIONS
+videos.forEach(video => {
+  video.addEventListener('play', () => {
+    videos.forEach(otherVideo => {
+      if (otherVideo !== video) otherVideo.pause();
+    });
+  });
+});
 
+// REVEAL ANIMATIONS
 function observeSections() {
+  const elements = document.querySelectorAll('.reveal');
 
-  const items = document.querySelectorAll('.fade');
-
-  if(!('IntersectionObserver' in window)) {
-    items.forEach(item => item.classList.add('visible'));
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(element => element.classList.add('visible'));
     return;
   }
 
   const observer = new IntersectionObserver(entries => {
-
     entries.forEach(entry => {
-
-      if(entry.isIntersecting) {
+      if (entry.isIntersecting) {
         entry.target.classList.add('visible');
         observer.unobserve(entry.target);
       }
-
     });
+  }, {threshold: .12});
 
-  },{threshold:.12});
-
-  items.forEach(item => {
-    observer.observe(item);
-  });
-
+  elements.forEach(element => observer.observe(element));
 }
-
-
-// AMBIENT MUSIC
-
-const music = document.getElementById('ambientAudio');
-const musicBtn = document.getElementById('musicBtn');
-
-musicBtn.addEventListener('click',async () => {
-
-  if(music.paused) {
-
-    try {
-
-      await music.play();
-      musicBtn.textContent = '♫ MUSIC ON';
-
-    } catch(error) {
-
-      musicBtn.textContent = '♫ MUSIC FILE NOT FOUND';
-
-    }
-
-  } else {
-
-    music.pause();
-    musicBtn.textContent = '♫ MUSIC OFF';
-
-  }
-
-});
-
-music.addEventListener('ended',() => {
-  musicBtn.textContent = '♫ MUSIC OFF';
-});
-
-
-// PAUSE OTHER VIDEOS WHEN ONE STARTS
-
-const memoryVideos = document.querySelectorAll('.memory-card video');
-
-memoryVideos.forEach(video => {
-
-  video.addEventListener('play',() => {
-
-    memoryVideos.forEach(otherVideo => {
-
-      if(otherVideo !== video) {
-        otherVideo.pause();
-      }
-
-    });
-
-  });
-
-});
-
 </script>
 
 </body>
