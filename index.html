@@ -665,6 +665,7 @@ footer {
       <input
         id="proposalDate"
         type="text"
+        inputmode="numeric"
         placeholder="DD/MM/YYYY"
         autocomplete="off"
         maxlength="10"
@@ -1240,6 +1241,9 @@ const musicSymbol = document.getElementById('musicSymbol');
 const musicToast = document.getElementById('musicToast');
 
 let toastTimer;
+let resumeAfterVideo = false;
+let resumeAfterVisibility = false;
+let musicStarted = false;
 
 function showMusicToast(message) {
   const subtitle = musicToast.querySelector('.music-toast-text span');
@@ -1269,11 +1273,36 @@ function updateMusicButton(isPlaying) {
   }
 }
 
-async function startBackgroundMusic() {
-  try {
-    backgroundMusic.volume = 0.45;
-    await backgroundMusic.play();
+function hasPlayingVideo() {
+  return Array.from(document.querySelectorAll('video'))
+    .some(video => !video.paused && !video.ended);
+}
 
+async function resumeBackgroundMusic() {
+  if (
+    document.visibilityState === 'hidden' ||
+    hasPlayingVideo() ||
+    !musicStarted
+  ) {
+    return;
+  }
+
+  try {
+    await backgroundMusic.play();
+    resumeAfterVideo = false;
+    resumeAfterVisibility = false;
+    updateMusicButton(true);
+  } catch (error) {
+    updateMusicButton(false);
+  }
+}
+
+async function startBackgroundMusic() {
+  musicStarted = true;
+  backgroundMusic.volume = 0.45;
+
+  try {
+    await backgroundMusic.play();
     updateMusicButton(true);
     showMusicToast('Your song is currently playing ♡');
   } catch (error) {
@@ -1282,8 +1311,19 @@ async function startBackgroundMusic() {
   }
 }
 
+// MANUAL MUSIC CONTROL
 musicControl.addEventListener('click', async () => {
   if (backgroundMusic.paused) {
+    // Do not start background music over a memory video.
+    if (hasPlayingVideo()) {
+      showMusicToast('Enjoy your memory video first ♡');
+      return;
+    }
+
+    resumeAfterVideo = false;
+    resumeAfterVisibility = false;
+    musicStarted = true;
+
     try {
       await backgroundMusic.play();
       updateMusicButton(true);
@@ -1293,6 +1333,10 @@ musicControl.addEventListener('click', async () => {
       showMusicToast('The song could not play. Please try again.');
     }
   } else {
+    // A manual pause cancels automatic resuming.
+    resumeAfterVideo = false;
+    resumeAfterVisibility = false;
+
     backgroundMusic.pause();
     updateMusicButton(false);
     showMusicToast('Music paused ♡');
@@ -1307,18 +1351,69 @@ backgroundMusic.addEventListener('pause', () => {
   updateMusicButton(false);
 });
 
-// STOP MUSIC WHEN THE VISITOR LEAVES THE PAGE
-function stopBackgroundMusic() {
-  backgroundMusic.pause();
-  backgroundMusic.currentTime = 0;
-}
+// VIDEO AND MUSIC COORDINATION
+const videos = document.querySelectorAll('video');
 
-window.addEventListener('pagehide', stopBackgroundMusic);
-window.addEventListener('beforeunload', stopBackgroundMusic);
+videos.forEach(video => {
+  video.addEventListener('play', () => {
+    // Pause any other memory video.
+    videos.forEach(otherVideo => {
+      if (otherVideo !== video) {
+        otherVideo.pause();
+      }
+    });
 
+    // Pause the song only if it was playing.
+    if (!backgroundMusic.paused) {
+      resumeAfterVideo = true;
+      backgroundMusic.pause();
+      showMusicToast('Enjoy your memory video ♡');
+    }
+  });
+
+  function handleVideoStopped() {
+    // Wait until every video has stopped.
+    if (resumeAfterVideo && !hasPlayingVideo()) {
+      if (document.visibilityState === 'hidden') {
+        resumeAfterVisibility = true;
+      } else {
+        resumeBackgroundMusic();
+      }
+    }
+  }
+
+  video.addEventListener('pause', handleVideoStopped);
+  video.addEventListener('ended', handleVideoStopped);
+});
+
+// PAUSE WHEN THE VISITOR SWITCHES TABS OR LEAVES THE PAGE
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
-    stopBackgroundMusic();
+    // Remember whether music should resume when the visitor returns.
+    resumeAfterVisibility =
+      !backgroundMusic.paused || resumeAfterVideo;
+
+    backgroundMusic.pause();
+  } else {
+    if (resumeAfterVisibility && !hasPlayingVideo()) {
+      resumeBackgroundMusic();
+    }
+  }
+});
+
+// Handle leaving and returning through browser page caching.
+window.addEventListener('pagehide', () => {
+  resumeAfterVisibility =
+    !backgroundMusic.paused || resumeAfterVideo;
+
+  backgroundMusic.pause();
+
+  // Do not reset currentTime.
+});
+
+window.addEventListener('pageshow', () => {
+  if (resumeAfterVisibility && !hasPlayingVideo()) {
+    resumeBackgroundMusic();
   }
 });
 
@@ -1326,6 +1421,24 @@ document.addEventListener('visibilitychange', () => {
 const dateForm = document.getElementById('dateForm');
 const dateInput = document.getElementById('proposalDate');
 const gateError = document.getElementById('gateError');
+
+// AUTOMATIC DD/MM/YYYY FORMATTING
+dateInput.addEventListener('input', function() {
+  const digits = this.value.replace(/\D/g, '').slice(0, 8);
+
+  let formatted = digits.slice(0, 2);
+
+  if (digits.length > 2) {
+    formatted += '/' + digits.slice(2, 4);
+  }
+
+  if (digits.length > 4) {
+    formatted += '/' + digits.slice(4, 8);
+  }
+
+  this.value = formatted;
+  gateError.textContent = '';
+});
 
 dateForm.addEventListener('submit', function(event) {
   event.preventDefault();
@@ -1340,25 +1453,16 @@ dateForm.addEventListener('submit', function(event) {
     window.scrollTo(0, 0);
     observeSections();
 
-    // START THE SONG AFTER THE CORRECT DATE IS ENTERED
+    // Start the song after the correct date is entered.
     startBackgroundMusic();
 
   } else {
-    gateError.textContent = "Not quite. Think back to the day you said yes. ❤️";
+    gateError.textContent =
+      "Not quite. Think back to the day you said yes. ❤️";
+
     dateInput.value = '';
     dateInput.focus();
   }
-});
-
-// PAUSE OTHER VIDEOS WHEN ONE PLAYS
-const videos = document.querySelectorAll('video');
-
-videos.forEach(video => {
-  video.addEventListener('play', () => {
-    videos.forEach(otherVideo => {
-      if (otherVideo !== video) otherVideo.pause();
-    });
-  });
 });
 
 // REVEAL ANIMATIONS
