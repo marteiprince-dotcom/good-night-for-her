@@ -358,7 +358,7 @@ section {
   text-align: center;
 }
 
-/* MUSIC */
+/* MUSIC SECTION */
 
 .music-section {
   max-width: 750px;
@@ -380,19 +380,113 @@ section {
   margin-bottom: 25px;
 }
 
-.youtube-frame {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 1px solid rgba(245,182,220,.25);
+.music-note {
+  padding: 25px;
+  border: 1px solid rgba(245,182,220,.2);
   border-radius: 18px;
-  overflow: hidden;
-  background: #10091e;
+  background: rgba(27,17,48,.65);
 }
 
-.youtube-frame iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
+/* MUSIC NOTIFICATION */
+
+.music-toast {
+  position: fixed;
+  z-index: 100;
+  top: 22px;
+  right: 22px;
+  width: min(350px, calc(100% - 36px));
+  padding: 16px 19px;
+  border: 1px solid rgba(245,182,220,.3);
+  border-radius: 17px;
+  background: rgba(24,13,42,.94);
+  box-shadow: 0 10px 45px rgba(0,0,0,.35),
+              0 0 30px rgba(189,155,255,.12);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: opacity .45s ease, transform .45s ease, visibility .45s;
+}
+
+.music-toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.music-toast-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #e8a9d1, #b99aff);
+  color: #170c26;
+  font-size: 1.2rem;
+}
+
+.music-toast-text {
+  min-width: 0;
+}
+
+.music-toast-text small {
+  display: block;
+  color: var(--pink);
+  font-size: .68rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.music-toast-text strong {
+  display: block;
+  color: var(--white);
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+.music-toast-text span {
+  display: block;
+  color: var(--muted);
+  font-size: .74rem;
+  margin-top: 3px;
+}
+
+/* FLOATING MUSIC BUTTON */
+
+.music-control {
+  position: fixed;
+  z-index: 90;
+  right: 22px;
+  bottom: 22px;
+  display: none;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 17px;
+  border-radius: 30px;
+  color: #170c26;
+  background: linear-gradient(110deg, #e8a9d1, #b99aff);
+  font-weight: 600;
+  font-size: .82rem;
+  box-shadow: 0 6px 28px rgba(189,155,255,.25);
+  transition: .3s;
+}
+
+.music-control.visible {
+  display: flex;
+}
+
+.music-control:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 35px rgba(189,155,255,.35);
+}
+
+.music-control .music-symbol {
+  font-size: 1.1rem;
 }
 
 /* LETTER */
@@ -505,6 +599,16 @@ footer {
   .story-card { line-height: 1.85; }
 
   .chapter-divider { margin: 55px auto; }
+
+  .music-toast {
+    top: 12px;
+    right: 12px;
+  }
+
+  .music-control {
+    right: 15px;
+    bottom: 15px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -520,6 +624,33 @@ footer {
 <body>
 
 <canvas id="stars"></canvas>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" loop preload="none">
+  <source src="assets/audio/Ayox%20-%20Need%20You%20to%20Stay%20Visualizer.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MUSIC NOTIFICATION -->
+<div class="music-toast" id="musicToast" role="status" aria-live="polite">
+  <div class="music-toast-icon">♫</div>
+  <div class="music-toast-text">
+    <small>Now Playing</small>
+    <strong>Ayox — Need You to Stay</strong>
+    <span>Your song is currently playing ♡</span>
+  </div>
+</div>
+
+<!-- FLOATING MUSIC CONTROL -->
+<button
+  class="music-control"
+  id="musicControl"
+  type="button"
+  aria-label="Pause background music"
+  aria-pressed="true"
+>
+  <span class="music-symbol" id="musicSymbol">♫</span>
+  <span id="musicControlText">Pause Music</span>
+</button>
 
 <!-- DATE ENTRANCE -->
 <div id="gate">
@@ -656,9 +787,7 @@ footer {
     <div class="chapter-subtitle">20 November 2025 · The day we became us</div>
 
     <div class="story-card">
-      <p>
-        And then, there was your yes.
-      </p>
+      <p>And then, there was your yes.</p>
 
       <p>
         A simple message, a question filled with feelings, and a reply
@@ -908,20 +1037,14 @@ footer {
       So, let's make it part of our little universe.
     </p>
 
-    <div class="youtube-frame">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/PcP2wu1EQqw"
-        title="Ayox - Need You to Stay Visualizer"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
+    <div class="music-note">
+      <div class="story-highlight" style="margin:0 0 12px">
+        ♫ A little song for you ♫
+      </div>
+      <p style="margin:0">
+        Ayox — Need You to Stay
+      </p>
     </div>
-
-    <p style="margin-top:18px;font-size:.8rem">
-      Ayox — Need You to Stay
-    </p>
   </div>
 </section>
 
@@ -1109,6 +1232,96 @@ resizeStars();
 drawStars();
 window.addEventListener('resize', resizeStars);
 
+// MUSIC SYSTEM
+const backgroundMusic = document.getElementById('backgroundMusic');
+const musicControl = document.getElementById('musicControl');
+const musicControlText = document.getElementById('musicControlText');
+const musicSymbol = document.getElementById('musicSymbol');
+const musicToast = document.getElementById('musicToast');
+
+let toastTimer;
+
+function showMusicToast(message) {
+  const subtitle = musicToast.querySelector('.music-toast-text span');
+  subtitle.textContent = message;
+
+  musicToast.classList.add('show');
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    musicToast.classList.remove('show');
+  }, 4500);
+}
+
+function updateMusicButton(isPlaying) {
+  musicControl.classList.add('visible');
+
+  if (isPlaying) {
+    musicSymbol.textContent = '♫';
+    musicControlText.textContent = 'Pause Music';
+    musicControl.setAttribute('aria-label', 'Pause background music');
+    musicControl.setAttribute('aria-pressed', 'true');
+  } else {
+    musicSymbol.textContent = '▶';
+    musicControlText.textContent = 'Play Music';
+    musicControl.setAttribute('aria-label', 'Play background music');
+    musicControl.setAttribute('aria-pressed', 'false');
+  }
+}
+
+async function startBackgroundMusic() {
+  try {
+    backgroundMusic.volume = 0.45;
+    await backgroundMusic.play();
+
+    updateMusicButton(true);
+    showMusicToast('Your song is currently playing ♡');
+  } catch (error) {
+    updateMusicButton(false);
+    showMusicToast('Tap the music button to play your song ♡');
+  }
+}
+
+musicControl.addEventListener('click', async () => {
+  if (backgroundMusic.paused) {
+    try {
+      await backgroundMusic.play();
+      updateMusicButton(true);
+      showMusicToast('Your song is currently playing ♡');
+    } catch (error) {
+      updateMusicButton(false);
+      showMusicToast('The song could not play. Please try again.');
+    }
+  } else {
+    backgroundMusic.pause();
+    updateMusicButton(false);
+    showMusicToast('Music paused ♡');
+  }
+});
+
+backgroundMusic.addEventListener('play', () => {
+  updateMusicButton(true);
+});
+
+backgroundMusic.addEventListener('pause', () => {
+  updateMusicButton(false);
+});
+
+// STOP MUSIC WHEN THE VISITOR LEAVES THE PAGE
+function stopBackgroundMusic() {
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
+}
+
+window.addEventListener('pagehide', stopBackgroundMusic);
+window.addEventListener('beforeunload', stopBackgroundMusic);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    stopBackgroundMusic();
+  }
+});
+
 // DATE GATE
 const dateForm = document.getElementById('dateForm');
 const dateInput = document.getElementById('proposalDate');
@@ -1126,6 +1339,10 @@ dateForm.addEventListener('submit', function(event) {
 
     window.scrollTo(0, 0);
     observeSections();
+
+    // START THE SONG AFTER THE CORRECT DATE IS ENTERED
+    startBackgroundMusic();
+
   } else {
     gateError.textContent = "Not quite. Think back to the day you said yes. ❤️";
     dateInput.value = '';
